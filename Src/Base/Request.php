@@ -10,7 +10,7 @@ use w7\Http\Message\Uri\Uri;
 
 /**
  * Class Request
- * @package we7\Http\Message\Base
+ * @package w7\Http\Message\Base
  */
 class Request implements RequestInterface
 {

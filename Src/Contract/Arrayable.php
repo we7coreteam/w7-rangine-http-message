@@ -4,7 +4,7 @@ namespace w7\Contract;
 
 /**
  * Interface Arrayable
- * @package we7\Contract
+ * @package w7\Contract
  */
 interface Arrayable
 {

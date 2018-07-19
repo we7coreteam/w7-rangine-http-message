@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Response
- * @package we7\Http\Message\Base
+ * @package w7\Http\Message\Base
  */
 class Response implements ResponseInterface
 {

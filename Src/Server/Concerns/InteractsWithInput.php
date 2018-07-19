@@ -7,7 +7,7 @@ use w7\Http\Message\Stream\SwooleStream;
 
 /**
  * Trait InteractsWithInput
- * @package we7\Http\Message\Server\Concerns
+ * @package w7\Http\Message\Server\Concerns
  */
 trait InteractsWithInput
 {

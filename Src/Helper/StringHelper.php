@@ -6,7 +6,7 @@ use \RuntimeException;
 
 /**
  * Class Request
- * @package we7\Http\Message\Server
+ * @package w7\Http\Message\Server
  */
 class StringHelper
 {

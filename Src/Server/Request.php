@@ -11,9 +11,9 @@ use w7\Http\Message\Upload\UploadedFile;
 
 /**
  * Class Request
- * @package we7\Http\Message\Server
+ * @package w7\Http\Message\Server
  */
-class Request extends \we7\Http\Message\Base\Request implements ServerRequestInterface
+class Request extends \w7\Http\Message\Base\Request implements ServerRequestInterface
 {
     use InteractsWithInput;
 
@@ -63,7 +63,7 @@ class Request extends \we7\Http\Message\Base\Request implements ServerRequestInt
      * Load a swoole request, and transfer to a swoft request object
      *
      * @param \Swoole\Http\Request $swooleRequest
-     * @return \we7\Http\Message\Server\Request
+     * @return \w7\Http\Message\Server\Request
      */
     public static function loadFromSwooleRequest(\Swoole\Http\Request $swooleRequest)
     {

@@ -9,9 +9,9 @@ use w7\Http\Message\Stream\SwooleStream;
 
 /**
  * Class Request
- * @package we7\Http\Message\Server
+ * @package w7\Http\Message\Server
  */
-class Response extends \we7\Http\Message\Base\Response
+class Response extends \w7\Http\Message\Base\Response
 {
     /**
      * @var \Throwable|null
@@ -59,7 +59,7 @@ class Response extends \we7\Http\Message\Base\Response
      *
      * @param  string $data   The data
      * @param  int    $status The HTTP status code.
-     * @return \we7\Http\Message\Server\Response when $data not jsonable
+     * @return \w7\Http\Message\Server\Response when $data not jsonable
      */
     public function raw(string $data = '', int $status = 200): Response
     {

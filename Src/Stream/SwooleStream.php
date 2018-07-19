@@ -6,7 +6,7 @@ use Psr\Http\Message\StreamInterface;
 
 /**
  * Class SwooleStream
- * @package we7\Http\Message\Stream
+ * @package w7\Http\Message\Stream
  */
 class SwooleStream implements StreamInterface
 {

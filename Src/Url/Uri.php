@@ -6,7 +6,7 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * Class Uri
- * @package we7\Http\Message\Uri
+ * @package w7\Http\Message\Uri
  */
 class Uri implements UriInterface
 {

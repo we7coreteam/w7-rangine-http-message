@@ -1,9 +1,9 @@
 <?php
 
-namespace we7\Http\Message\Server\Concerns;
+namespace w7\Http\Message\Server\Concerns;
 
-use we7\Helper\JsonHelper;
-use we7\Http\Message\Stream\SwooleStream;
+use w7\Helper\JsonHelper;
+use w7\Http\Message\Stream\SwooleStream;
 
 /**
  * Trait InteractsWithInput

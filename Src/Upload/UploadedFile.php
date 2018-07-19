@@ -1,6 +1,6 @@
 <?php
 
-namespace we7\Http\Message\Upload;
+namespace w7\Http\Message\Upload;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;

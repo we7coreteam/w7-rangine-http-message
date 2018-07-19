@@ -2,7 +2,7 @@
 
 namespace we7\Helper;
 
-use we7\Contract\Arrayable;
+use w7\Contract\Arrayable;
 
 /**
  * Class JsonHelper

@@ -1,6 +1,6 @@
 <?php
 
-namespace we7\Http\Message\Base;
+namespace w7\Http\Message\Base;
 
 use Psr\Http\Message\ResponseInterface;
 

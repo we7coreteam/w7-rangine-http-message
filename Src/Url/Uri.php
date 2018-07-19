@@ -1,6 +1,6 @@
 <?php
 
-namespace we7\Http\Message\Uri;
+namespace w7\Http\Message\Uri;
 
 use Psr\Http\Message\UriInterface;
 

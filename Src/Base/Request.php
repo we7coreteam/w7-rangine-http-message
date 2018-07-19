@@ -1,12 +1,12 @@
 <?php
 
-namespace we7\Http\Message\Base;
+namespace w7\Http\Message\Base;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use we7\Http\Message\Stream\SwooleStream;
-use we7\Http\Message\Uri\Uri;
+use w7\Http\Message\Stream\SwooleStream;
+use w7\Http\Message\Uri\Uri;
 
 /**
  * Class Request

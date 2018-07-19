@@ -1,13 +1,13 @@
 <?php
 
-namespace we7\Http\Message\Server;
+namespace w7\Http\Message\Server;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use we7\Http\Message\Server\Concerns\InteractsWithInput;
-use we7\Http\Message\Uri\Uri;
-use we7\Http\Message\Stream\SwooleStream;
-use we7\Http\Message\Upload\UploadedFile;
+use w7\Http\Message\Server\Concerns\InteractsWithInput;
+use w7\Http\Message\Uri\Uri;
+use w7\Http\Message\Stream\SwooleStream;
+use w7\Http\Message\Upload\UploadedFile;
 
 /**
  * Class Request

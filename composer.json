@@ -16,7 +16,7 @@
     "classmap": [
     ],
     "psr-4": {
-      "we7\\Http\\Message\\": "Src/"
+      "w7\\Http\\Message\\": "Src/"
     },
     "files": [
       "Src/Helper/Functions.php"

@@ -1,6 +1,6 @@
 <?php
 
-namespace we7\Contract;
+namespace w7\Contract;
 
 /**
  * Interface Arrayable

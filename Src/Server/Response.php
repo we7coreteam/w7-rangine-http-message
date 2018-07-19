@@ -1,11 +1,11 @@
 <?php
 
-namespace we7\Http\Message\Server;
+namespace w7\Http\Message\Server;
 
-use we7\Contract\Arrayable;
-use we7\Helper\JsonHelper;
-use we7\Helper\StringHelper;
-use we7\Http\Message\Stream\SwooleStream;
+use w7\Contract\Arrayable;
+use w7\Helper\JsonHelper;
+use w7\Helper\StringHelper;
+use w7\Http\Message\Stream\SwooleStream;
 
 /**
  * Class Request

@@ -3,8 +3,8 @@
 namespace w7\Http\Message\Server;
 
 use w7\Contract\Arrayable;
-use w7\Helper\JsonHelper;
-use w7\Helper\StringHelper;
+use w7\Http\Message\Helper\JsonHelper;
+use w7\Http\Message\Helper\StringHelper;
 use w7\Http\Message\Stream\SwooleStream;
 
 /**

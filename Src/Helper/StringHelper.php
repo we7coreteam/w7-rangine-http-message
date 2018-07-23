@@ -1,6 +1,6 @@
 <?php
 
-namespace w7\Helper;
+namespace w7\Http\Message\Helper;
 
 use \RuntimeException;
 

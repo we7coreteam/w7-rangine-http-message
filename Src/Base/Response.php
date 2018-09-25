@@ -1,12 +1,12 @@
 <?php
 
-namespace w7\Http\Message\Base;
+namespace W7\Http\Message\Base;
 
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Response
- * @package w7\Http\Message\Base
+ * @package W7\Http\Message\Base
  */
 class Response implements ResponseInterface
 {

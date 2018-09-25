@@ -1,17 +1,17 @@
 <?php
 
-namespace w7\Http\Message\Server;
+namespace W7\Http\Message\Server;
 
-use w7\Contract\Arrayable;
-use w7\Http\Message\Helper\JsonHelper;
-use w7\Http\Message\Helper\StringHelper;
-use w7\Http\Message\Stream\SwooleStream;
+use W7\Contract\Arrayable;
+use W7\Http\Message\Helper\JsonHelper;
+use W7\Http\Message\Helper\StringHelper;
+use W7\Http\Message\Stream\SwooleStream;
 
 /**
  * Class Request
- * @package w7\Http\Message\Server
+ * @package W7\Http\Message\Server
  */
-class Response extends \w7\Http\Message\Base\Response
+class Response extends \W7\Http\Message\Base\Response
 {
     /**
      * @var \Throwable|null
@@ -59,7 +59,7 @@ class Response extends \w7\Http\Message\Base\Response
      *
      * @param  string $data   The data
      * @param  int    $status The HTTP status code.
-     * @return \w7\Http\Message\Server\Response when $data not jsonable
+     * @return \W7\Http\Message\Server\Response when $data not jsonable
      */
     public function raw(string $data = '', int $status = 200): Response
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace w7\Http\Message\Uri;
+namespace W7\Http\Message\Uri;
 
 use Psr\Http\Message\UriInterface;
 
 /**
  * Class Uri
- * @package w7\Http\Message\Uri
+ * @package W7\Http\Message\Uri
  */
 class Uri implements UriInterface
 {

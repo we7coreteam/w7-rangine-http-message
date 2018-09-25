@@ -1,19 +1,19 @@
 <?php
 
-namespace w7\Http\Message\Server;
+namespace W7\Http\Message\Server;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use w7\Http\Message\Server\Concerns\InteractsWithInput;
-use w7\Http\Message\Uri\Uri;
-use w7\Http\Message\Stream\SwooleStream;
-use w7\Http\Message\Upload\UploadedFile;
+use W7\Http\Message\Server\Concerns\InteractsWithInput;
+use W7\Http\Message\Uri\Uri;
+use W7\Http\Message\Stream\SwooleStream;
+use W7\Http\Message\Upload\UploadedFile;
 
 /**
  * Class Request
- * @package w7\Http\Message\Server
+ * @package W7\Http\Message\Server
  */
-class Request extends \w7\Http\Message\Base\Request implements ServerRequestInterface
+class Request extends \W7\Http\Message\Base\Request implements ServerRequestInterface
 {
     use InteractsWithInput;
 
@@ -63,7 +63,7 @@ class Request extends \w7\Http\Message\Base\Request implements ServerRequestInte
      * Load a swoole request, and transfer to a swoft request object
      *
      * @param \Swoole\Http\Request $swooleRequest
-     * @return \w7\Http\Message\Server\Request
+     * @return \W7\Http\Message\Server\Request
      */
     public static function loadFromSwooleRequest(\Swoole\Http\Request $swooleRequest)
     {

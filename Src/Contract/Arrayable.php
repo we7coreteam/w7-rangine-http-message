@@ -1,10 +1,10 @@
 <?php
 
-namespace w7\Contract;
+namespace W7\Contract;
 
 /**
  * Interface Arrayable
- * @package w7\Contract
+ * @package W7\Contract
  */
 interface Arrayable
 {

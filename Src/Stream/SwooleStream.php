@@ -1,12 +1,12 @@
 <?php
 
-namespace w7\Http\Message\Stream;
+namespace W7\Http\Message\Stream;
 
 use Psr\Http\Message\StreamInterface;
 
 /**
  * Class SwooleStream
- * @package w7\Http\Message\Stream
+ * @package W7\Http\Message\Stream
  */
 class SwooleStream implements StreamInterface
 {

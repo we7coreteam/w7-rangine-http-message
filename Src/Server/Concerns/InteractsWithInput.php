@@ -1,13 +1,13 @@
 <?php
 
-namespace w7\Http\Message\Server\Concerns;
+namespace W7\Http\Message\Server\Concerns;
 
-use w7\Helper\JsonHelper;
-use w7\Http\Message\Stream\SwooleStream;
+use W7\Helper\JsonHelper;
+use W7\Http\Message\Stream\SwooleStream;
 
 /**
  * Trait InteractsWithInput
- * @package w7\Http\Message\Server\Concerns
+ * @package W7\Http\Message\Server\Concerns
  */
 trait InteractsWithInput
 {

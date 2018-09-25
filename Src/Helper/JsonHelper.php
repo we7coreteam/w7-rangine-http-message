@@ -1,12 +1,12 @@
 <?php
 
-namespace w7\Http\Message\Helper;
+namespace W7\Http\Message\Helper;
 
-use w7\Contract\Arrayable;
+use W7\Contract\Arrayable;
 
 /**
  * Class JsonHelper
- * @package w7\Helper
+ * @package W7\Helper
  */
 class JsonHelper
 {

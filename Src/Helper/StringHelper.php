@@ -1,12 +1,12 @@
 <?php
 
-namespace w7\Http\Message\Helper;
+namespace W7\Http\Message\Helper;
 
 use \RuntimeException;
 
 /**
  * Class Request
- * @package w7\Http\Message\Server
+ * @package W7\Http\Message\Server
  */
 class StringHelper
 {

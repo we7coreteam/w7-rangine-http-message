@@ -1,13 +1,13 @@
 <?php
 
-namespace w7\Http\Message\Upload;
+namespace W7\Http\Message\Upload;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class Request
- * @package w7\Http\Message\Server
+ * @package W7\Http\Message\Server
  */
 class UploadedFile implements UploadedFileInterface
 {

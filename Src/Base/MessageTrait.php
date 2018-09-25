@@ -1,9 +1,9 @@
 <?php
 
-namespace w7\Http\Message\Base;
+namespace W7\Http\Message\Base;
 
 use Psr\Http\Message\StreamInterface;
-use w7\Http\Message\Stream\SwooleStream;
+use W7\Http\Message\Stream\SwooleStream;
 /**
  * Trait implementing functionality common to requests and responses.
  */

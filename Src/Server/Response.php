@@ -3,6 +3,7 @@
 namespace W7\Http\Message\Server;
 
 use W7\Contract\Arrayable;
+use w7\Http\Message\File\File;
 use W7\Http\Message\Helper\JsonHelper;
 use W7\Http\Message\Stream\SwooleStream;
 
@@ -28,6 +29,11 @@ class Response extends \W7\Http\Message\Base\Response
      * @var array
      */
     protected $cookies = [];
+
+    /**
+     * @var File
+     */
+    protected $file;
 
     /**
      * 初始化响应请求
@@ -110,14 +116,6 @@ class Response extends \W7\Http\Message\Base\Response
         return $response;
     }
 
-    public function sendfile(string $filepath, int $offset = 0, int $length = 0) {
-        if (!file_exists($filepath)) {
-            return $this->send();
-        }
-
-        return $this->swooleResponse->sendfile($filepath, $offset, $length);
-    }
-
     /**
      * 处理 Response 并发送数据
      */
@@ -153,9 +151,16 @@ class Response extends \W7\Http\Message\Base\Response
         $this->swooleResponse->status($response->getStatusCode());
 
         /**
-         * Body
+         * 发送文件, 调用 sendfile 不必再调用 send
          */
-        $this->swooleResponse->end($response->getBody()->getContents());
+        if (!empty($this->file)) {
+            $this->swooleResponse->sendfile($this->file->getFilename(), $this->file->getOffset(), $this->file->getLength());
+        } else {
+            /**
+             * Body
+             */
+            $this->swooleResponse->end($response->getBody()->getContents());
+        }
     }
 
     /**
@@ -185,6 +190,13 @@ class Response extends \W7\Http\Message\Base\Response
     {
         $clone = clone $this;
         $clone->cookies[$cookie->getDomain()][$cookie->getPath()][$cookie->getName()] = $cookie;
+        return $clone;
+    }
+
+    public function withFile(File $file)
+    {
+        $clone = clone $this;
+        $clone->file = $file;
         return $clone;
     }
 

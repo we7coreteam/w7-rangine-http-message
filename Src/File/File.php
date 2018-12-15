@@ -4,7 +4,7 @@
  * @date 18-12-15 下午6:58
  */
 
-namespace w7\Http\Message\File;
+namespace W7\Http\Message\File;
 
 
 class File {

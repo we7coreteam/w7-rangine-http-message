@@ -4,7 +4,6 @@ namespace W7\Http\Message\Server;
 
 use W7\Contract\Arrayable;
 use W7\Http\Message\Helper\JsonHelper;
-use W7\Http\Message\Helper\StringHelper;
 use W7\Http\Message\Stream\SwooleStream;
 
 /**
@@ -111,6 +110,14 @@ class Response extends \W7\Http\Message\Base\Response
         return $response;
     }
 
+    public function download(string $filepath, int $offset = 0, int $length = 0) {
+        if (!file_exists($filepath)) {
+            return $this->send();
+        }
+
+        return $this->swooleResponse->sendfile($filepath, $offset, $length);
+    }
+
     /**
      * 处理 Response 并发送数据
      */
@@ -168,18 +175,18 @@ class Response extends \W7\Http\Message\Base\Response
         return $new;
     }
 
-//    /**
-//     * Return an instance with specified cookies.
-//     *
-//     * @param Cookie $cookie
-//     * @return static
-//     */
-//    public function withCookie(Cookie $cookie)
-//    {
-//        $clone = clone $this;
-//        $clone->cookies[$cookie->getDomain()][$cookie->getPath()][$cookie->getName()] = $cookie;
-//        return $clone;
-//    }
+    /**
+     * Return an instance with specified cookies.
+     *
+     * @param Cookie $cookie
+     * @return static
+     */
+    public function withCookie(Cookie $cookie)
+    {
+        $clone = clone $this;
+        $clone->cookies[$cookie->getDomain()][$cookie->getPath()][$cookie->getName()] = $cookie;
+        return $clone;
+    }
 
     /**
      * @return null|\Throwable
@@ -215,6 +222,6 @@ class Response extends \W7\Http\Message\Base\Response
      */
     public function isMatchAccept(string $accept, string $keyword): bool
     {
-        return StringHelper::contains($accept, $keyword) === true;
+        return strpos($accept, $keyword) !== false;
     }
 }

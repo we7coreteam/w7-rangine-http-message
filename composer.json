@@ -10,7 +10,8 @@
   "description": "microservice framework base on swoole",
   "license": "Apache-2.0",
   "require": {
-    "psr/http-message": "^1.0"
+    "psr/http-message": "^1.0",
+    "eaglewu/swoole-ide-helper": "dev-master"
   },
   "autoload": {
     "classmap": [
@@ -24,12 +25,6 @@
   },
   "autoload-dev": {
     "psr-4": {
-    }
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
     }
   },
   "scripts": {

@@ -110,7 +110,7 @@ class Response extends \W7\Http\Message\Base\Response
         return $response;
     }
 
-    public function download(string $filepath, int $offset = 0, int $length = 0) {
+    public function sendfile(string $filepath, int $offset = 0, int $length = 0) {
         if (!file_exists($filepath)) {
             return $this->send();
         }

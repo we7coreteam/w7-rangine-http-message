@@ -224,7 +224,10 @@ class UploadedFile implements UploadedFileInterface
      */
     public function getStream()
     {
-        throw new \BadMethodCallException('Not implemented');
+        if (!file_exists($this->tmpFile)) {
+            throw new \BadMethodCallException('Temp file not found');
+        }
+        return file_get_contents($this->tmpFile);
     }
 
     /**

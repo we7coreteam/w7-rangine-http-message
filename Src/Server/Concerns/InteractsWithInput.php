@@ -2,8 +2,9 @@
 
 namespace W7\Http\Message\Server\Concerns;
 
-use W7\Helper\JsonHelper;
+use W7\Http\Message\Helper\JsonHelper;
 use W7\Http\Message\Stream\SwooleStream;
+use W7\Http\Message\Upload\UploadedFile;
 
 /**
  * Trait InteractsWithInput
@@ -152,11 +153,11 @@ trait InteractsWithInput
     }
 
     /**
-     * Retrieve a upload item from the request
+     *
      *
      * @param string|null $key
      * @param null        $default
-     * @return array|\Swoft\Web\UploadedFile|null
+     * @return array|UploadedFile|null
      */
     public function file(string $key = null, $default = null)
     {

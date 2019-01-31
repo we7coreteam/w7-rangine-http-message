@@ -349,6 +349,14 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * @return null|string
+     */
+    public function getTmpFile(): ?string
+    {
+        return $this->tmpFile;
+    }
+
+    /**
      * @return string
      */
     public function __toString()

@@ -75,7 +75,7 @@ class Response extends \W7\Http\Message\Base\Response
         $this->getCharset() && $response = $response->withCharset($this->getCharset());
 
         // Content
-        $data && $response = $response->withContent($data);
+        ($data || is_numeric($data)) && $response = $response->withContent($data);
 
         // Status code
         $status && $response = $response->withStatus($status);
@@ -101,7 +101,7 @@ class Response extends \W7\Http\Message\Base\Response
         $this->getCharset() && $response = $response->withCharset($this->getCharset());
 
         // Content
-        if ($data && ($this->isArrayable($data) || is_string($data))) {
+        if (($data || is_numeric($data)) && ($this->isArrayable($data) || is_string($data))) {
             is_string($data) && $data = ['data' => $data];
             $content = JsonHelper::encode($data, $encodingOptions);
             $response = $response->withContent($content);

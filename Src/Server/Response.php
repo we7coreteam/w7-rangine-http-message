@@ -35,14 +35,20 @@ class Response extends \W7\Http\Message\Base\Response
      */
     protected $file;
 
+    public static function loadFromSwooleResponse(\Swoole\Http\Response $response)
+    {
+        $self = new static();
+        $self->swooleResponse = $response;
+        return  $self;
+    }
+    
     /**
      * 初始化响应请求
      *
      * @param \Swoole\Http\Response $response
      */
-    public function __construct(\Swoole\Http\Response $response)
+    public function __construct()
     {
-        $this->swooleResponse = $response;
     }
 
     /**

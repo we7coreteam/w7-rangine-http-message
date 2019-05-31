@@ -6,5 +6,11 @@ fork 自  Swoft Http-message 组件，感谢 Swoft 团队
 
 # commit
 
-修改了部分关于下载文件的功能
+ADD 下载文件　sendfile 
+
+ADD 获取上传文件对象
+
+FIXED response不能返回0
+
+FIXED 优化整理代码
 

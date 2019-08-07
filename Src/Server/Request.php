@@ -4,6 +4,7 @@ namespace W7\Http\Message\Server;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use W7\Http\Message\Contract\Session;
 use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Uri\Uri;
 use W7\Http\Message\Stream\SwooleStream;
@@ -58,6 +59,11 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
      * @var mixed
      */
     private $bodyParams;
+
+	/**
+	 * @var Session
+	 */
+    public $session;
 
     /**
      * Load a swoole request, and transfer to a swoft request object

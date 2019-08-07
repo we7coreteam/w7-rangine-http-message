@@ -3,6 +3,7 @@
 namespace W7\Http\Message\Server;
 
 use W7\Contract\Arrayable;
+use W7\Http\Message\Base\Cookie;
 use w7\Http\Message\File\File;
 use W7\Http\Message\Helper\JsonHelper;
 use W7\Http\Message\Stream\SwooleStream;
@@ -136,20 +137,18 @@ class Response extends \W7\Http\Message\Base\Response
         foreach ($response->getHeaders() as $key => $value) {
             $this->swooleResponse->header($key, implode(';', $value));
         }
-
-        //整体屏蔽了COOKIES
-//        /**
-//         * Cookies
-//         */
-//        foreach ((array)$this->cookies as $domain => $paths) {
-//            foreach ($paths ?? [] as $path => $item) {
-//                foreach ($item ?? [] as $name => $cookie) {
-//                    if ($cookie instanceof Cookie) {
-//                        $this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-//                    }
-//                }
-//            }
-//        }
+        /**
+         * Cookies
+         */
+        foreach ((array)$this->cookies as $domain => $paths) {
+            foreach ($paths ?? [] as $path => $item) {
+                foreach ($item ?? [] as $name => $cookie) {
+                    if ($cookie instanceof Cookie) {
+                        $this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+                    }
+                }
+            }
+        }
 
         /**
          * Status code

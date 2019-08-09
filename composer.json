@@ -30,6 +30,7 @@
     "test": "./vendor/bin/phpunit -c phpunit.xml"
   },
   "require-dev": {
-    "eaglewu/swoole-ide-helper": "dev-master"
+    "eaglewu/swoole-ide-helper": "dev-master",
+    "w7/php-cs-fixer": "^1.0"
   }
 }

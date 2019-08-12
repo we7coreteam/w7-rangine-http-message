@@ -20,8 +20,7 @@ class Cookie {
 		'path'     => '',
 		'expires'  => 0,
 		'secure'   => false,
-		'httpOnly' => false,
-		'hostOnly' => false,
+		'httpOnly' => false
 	];
 
 	/**
@@ -53,11 +52,6 @@ class Cookie {
 	 * @var bool
 	 */
 	private $secure  = false;
-
-	/**
-	 * @var bool
-	 */
-	private $hostOnly = false;
 
 	/**
 	 * @var bool
@@ -118,8 +112,7 @@ class Cookie {
 			'path'     => $this->path,
 			'expires'  => $this->expires,
 			'secure'   => $this->secure,
-			'httpOnly' => $this->httpOnly,
-			'hostOnly' => $this->hostOnly,
+			'httpOnly' => $this->httpOnly
 		];
 	}
 
@@ -144,10 +137,6 @@ class Cookie {
 		if ($this->secure) {
 			$result .= '; secure';
 		}
-
-		// if ($hostOnly) {
-		//     $result .= '; HostOnly';
-		// }
 
 		if ($this->httpOnly) {
 			$result .= '; HttpOnly';
@@ -262,23 +251,6 @@ class Cookie {
 	 */
 	public function setSecure(bool $secure): Cookie {
 		$this->secure = $secure;
-		return $this;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isHostOnly(): bool {
-		return $this->hostOnly;
-	}
-
-	/**
-	 * @param bool $hostOnly
-	 *
-	 * @return Cookie
-	 */
-	public function setHostOnly(bool $hostOnly): Cookie {
-		$this->hostOnly = $hostOnly;
 		return $this;
 	}
 

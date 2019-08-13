@@ -48,7 +48,7 @@ class Response extends \W7\Http\Message\Base\Response {
 		$self->swooleResponse = $response;
 		return  $self;
 	}
-	
+
 	/**
 	 * 初始化响应请求
 	 *
@@ -110,16 +110,16 @@ class Response extends \W7\Http\Message\Base\Response {
 		$this->getCharset() && $response = $response->withCharset($this->getCharset());
 
 		// Content
-		if (($data || is_numeric($data)) && ($this->isArrayable($data) || is_string($data))) {
-			is_string($data) && $data = ['data' => $data];
+		if (!isset($data)) {
+			$response = $response->withContent('{}');
+		} else {
+			$data = is_array($data) ? $data : ['data' => $data];
 			$content = JsonHelper::encode($data, $encodingOptions);
 			$response = $response->withContent($content);
-		} else {
-			$response = $response->withContent('{}');
 		}
 
 		// Status code
-		$status && $response = $response->withStatus($status);
+		$response = $response->withStatus($status);
 
 		return $response;
 	}

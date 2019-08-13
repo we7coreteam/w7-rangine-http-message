@@ -25,5 +25,7 @@ interface Session {
 
 	public function get($key, $default = '');
 
+	public function has($key);
+
 	public function destroy();
 }

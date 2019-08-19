@@ -109,10 +109,10 @@ class Cookie {
 		return [
 			'value'    => $this->value,
 			'domain'   => $this->domain,
-			'path'     => $this->path,
-			'expires'  => $this->expires,
-			'secure'   => $this->secure,
-			'httpOnly' => $this->httpOnly
+			'path'     => $this->getPath(),
+			'expires'  => $this->getExpires(),
+			'secure'   => $this->isSecure(),
+			'httpOnly' => $this->isHttpOnly()
 		];
 	}
 
@@ -122,23 +122,23 @@ class Cookie {
 	public function toString(): string {
 		$result = urlencode($this->name) . '=' . urlencode($this->value);
 
-		if ($this->domain) {
-			$result .= '; domain=' . $this->domain;
+		if ($this->getDomain()) {
+			$result .= '; domain=' . $this->getDomain();
 		}
 
-		if ($this->path) {
-			$result .= '; path=' . $this->path;
+		if ($this->getPath()) {
+			$result .= '; path=' . $this->getPath();
 		}
 
-		if ($timestamp = $this->expires) {
+		if ($timestamp = $this->getExpires()) {
 			$result .= '; expires=' . gmdate('D, d-M-Y H:i:s e', $timestamp);
 		}
 
-		if ($this->secure) {
+		if ($this->isSecure()) {
 			$result .= '; secure';
 		}
 
-		if ($this->httpOnly) {
+		if ($this->isHttpOnly()) {
 			$result .= '; HttpOnly';
 		}
 
@@ -190,7 +190,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getPath(): string {
-		return $this->path;
+		return empty($this->path) ? ini_get('session.cookie_path') : $this->path;
 	}
 
 	/**
@@ -207,7 +207,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getDomain(): string {
-		return $this->domain;
+		return empty($this->domain) ? ini_get('session.cookie_domain') : $this->domain;
 	}
 
 	/**
@@ -224,7 +224,7 @@ class Cookie {
 	 * @return int
 	 */
 	public function getExpires(): int {
-		return $this->expires;
+		return empty($this->expires) ? (time() + ini_get('session.cookie_lifetime')) : $this->expires;
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isSecure(): bool {
-		return $this->secure;
+		return empty($this->secure) ? ini_get('session.cookie_secure') : $this->secure;
 	}
 
 	/**
@@ -258,7 +258,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isHttpOnly(): bool {
-		return $this->httpOnly;
+		return empty($this->httpOnly) ? ini_get('session.cookie_httponly') : $this->httpOnly;
 	}
 
 	/**

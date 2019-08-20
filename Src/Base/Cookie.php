@@ -58,6 +58,12 @@ class Cookie {
 	 */
 	private $httpOnly = false;
 
+	public function __construct(array $config = []) {
+		if ($config) {
+			$this->init($config);
+		}
+	}
+
 	/**
 	 * @param array $config
 	 *
@@ -66,13 +72,7 @@ class Cookie {
 	 * @throws ContainerException
 	 */
 	public static function new(array $config = []): self {
-		$self = new static();
-
-		if ($config) {
-			$self->init($config);
-		}
-
-		return $self;
+		return new static($config);
 	}
 
 	/**

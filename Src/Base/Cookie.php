@@ -18,7 +18,7 @@ class Cookie {
 		'value'    => '',
 		'domain'   => '',
 		'path'     => '',
-		'expires'  => 0,
+		'expires'  => null,
 		'secure'   => false,
 		'httpOnly' => false
 	];
@@ -46,7 +46,7 @@ class Cookie {
 	/**
 	 * @var int
 	 */
-	private $expires = 0;
+	private $expires = null;
 
 	/**
 	 * @var bool
@@ -224,7 +224,11 @@ class Cookie {
 	 * @return int
 	 */
 	public function getExpires(): int {
-		return empty($this->expires) ? (time() + ini_get('session.cookie_lifetime')) : $this->expires;
+		if (!isset($this->expires)) {
+			$defaultExpires = ini_get('session.cookie_lifetime');
+			return $defaultExpires == 0 ? 0 : (time() + $defaultExpires);
+		}
+		return $this->expires;
 	}
 
 	/**

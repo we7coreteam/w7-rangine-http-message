@@ -16,11 +16,11 @@ class Cookie {
 	 */
 	public const DEFAULTS = [
 		'value'    => '',
-		'domain'   => '',
-		'path'     => '',
+		'domain'   => null,
+		'path'     => null,
 		'expires'  => null,
-		'secure'   => false,
-		'httpOnly' => false
+		'secure'   => null,
+		'httpOnly' => null
 	];
 
 	/**
@@ -36,12 +36,12 @@ class Cookie {
 	/**
 	 * @var string
 	 */
-	private $path = '';
+	private $path = null;
 
 	/**
 	 * @var string
 	 */
-	private $domain = '';
+	private $domain = null;
 
 	/**
 	 * @var int
@@ -51,12 +51,12 @@ class Cookie {
 	/**
 	 * @var bool
 	 */
-	private $secure  = false;
+	private $secure  = null;
 
 	/**
 	 * @var bool
 	 */
-	private $httpOnly = false;
+	private $httpOnly = null;
 
 	public function __construct(array $config = []) {
 		if ($config) {
@@ -190,7 +190,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getPath(): string {
-		return empty($this->path) ? ini_get('session.cookie_path') : $this->path;
+		return !isset($this->path) ? ini_get('session.cookie_path') : $this->path;
 	}
 
 	/**
@@ -207,7 +207,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getDomain(): string {
-		return empty($this->domain) ? ini_get('session.cookie_domain') : $this->domain;
+		return !isset($this->domain) ? ini_get('session.cookie_domain') : $this->domain;
 	}
 
 	/**
@@ -245,7 +245,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isSecure(): bool {
-		return empty($this->secure) ? ini_get('session.cookie_secure') : $this->secure;
+		return !isset($this->secure) ? ini_get('session.cookie_secure') : $this->secure;
 	}
 
 	/**
@@ -262,7 +262,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isHttpOnly(): bool {
-		return empty($this->httpOnly) ? ini_get('session.cookie_httponly') : $this->httpOnly;
+		return !isset($this->httpOnly) ? ini_get('session.cookie_httponly') : $this->httpOnly;
 	}
 
 	/**

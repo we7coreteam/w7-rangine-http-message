@@ -32,5 +32,6 @@
 	"require-dev": {
 		"eaglewu/swoole-ide-helper": "dev-master",
 		"w7/php-cs-fixer": "^1.0"
-	}
+	},
+	"minimum-stability": "dev"
 }

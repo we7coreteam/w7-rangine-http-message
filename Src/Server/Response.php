@@ -1,10 +1,12 @@
 <?php
 
 /**
- * Rangine Http Message
+ * WeEngine Api System
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
+ * This is not a free software
+ * Using it under the license terms
  * visited https://www.w7.cc for more details
  */
 
@@ -12,8 +14,12 @@ namespace W7\Http\Message\Server;
 
 use W7\Contract\Arrayable;
 use W7\Http\Message\Base\Cookie;
+use W7\Http\Message\Base\CookieTrait;
 use w7\Http\Message\File\File;
-use W7\Http\Message\Helper\JsonHelper;
+use W7\Http\Message\Formatter\HtmlResponseFormatter;
+use W7\Http\Message\Formatter\JsonResponseFormatter;
+use W7\Http\Message\Formatter\RawResponseFormatter;
+use W7\Http\Message\Formatter\ResponseFormatterInterface;
 use W7\Http\Message\Stream\SwooleStream;
 
 /**
@@ -21,6 +27,20 @@ use W7\Http\Message\Stream\SwooleStream;
  * @package W7\Http\Message\Server
  */
 class Response extends \W7\Http\Message\Base\Response {
+	use CookieTrait;
+
+	/**
+	 * Original response data. When this is not null, it will be converted into stream content
+	 *
+	 * @var mixed
+	 */
+	protected $data;
+
+	/**
+	 * @var File
+	 */
+	protected $file;
+
 	/**
 	 * @var \Throwable|null
 	 */
@@ -34,14 +54,9 @@ class Response extends \W7\Http\Message\Base\Response {
 	protected $swooleResponse;
 
 	/**
-	 * @var array
+	 * @var ResponseFormatterInterface
 	 */
-	protected $cookies = [];
-
-	/**
-	 * @var File
-	 */
-	protected $file;
+	protected $formatter;
 
 	public static function loadFromSwooleResponse(\Swoole\Http\Response $response) {
 		$self = new static();
@@ -55,6 +70,18 @@ class Response extends \W7\Http\Message\Base\Response {
 	 * @param \Swoole\Http\Response $response
 	 */
 	public function __construct() {
+	}
+
+	public function setFormatter(ResponseFormatterInterface $formatter) {
+		$this->formatter = $formatter;
+	}
+
+	public function getFormatter() : ResponseFormatterInterface {
+		if (!$this->formatter) {
+			$this->formatter = new JsonResponseFormatter();
+		}
+
+		return $this->formatter;
 	}
 
 	/**
@@ -71,65 +98,58 @@ class Response extends \W7\Http\Message\Base\Response {
 	}
 
 	/**
-	 * return a Raw format response
-	 *
-	 * @param  string $data   The data
-	 * @param  int    $status The HTTP status code.
-	 * @return \W7\Http\Message\Server\Response when $data not jsonable
+	 * @param string $data
+	 * @return Response
 	 */
-	public function raw(string $data = '', int $status = 200): Response {
-		$response = $this;
-
-		// Headers
-		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', 'text/plain');
-		$this->getCharset() && $response = $response->withCharset($this->getCharset());
-
-		// Content
-		($data || is_numeric($data)) && $response = $response->withContent($data);
-
-		// Status code
-		$status && $response = $response->withStatus($status);
-
-		return $response;
+	public function raw(string $data = ''): Response {
+		$this->setFormatter(new RawResponseFormatter());
+		return $this->withData($data);
 	}
 
 	/**
-	 * return a Json format response
-	 *
-	 * @param  array|Arrayable $data            The data
-	 * @param  int             $status          The HTTP status code.
-	 * @param  int             $encodingOptions Json encoding options
-	 * @return static when $data not jsonable
-	 * @throws \InvalidArgumentException
+	 * @param array $data
+	 * @return Response
 	 */
-	public function json($data = [], int $status = 200, int $encodingOptions = JSON_UNESCAPED_UNICODE): Response {
-		$response = $this;
+	public function json($data = []): Response {
+		$this->setFormatter(new JsonResponseFormatter());
+		return $this->withData($data);
+	}
 
-		// Headers
-		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', 'application/json');
-		$this->getCharset() && $response = $response->withCharset($this->getCharset());
+	/**
+	 * @param array $data
+	 * @return Response
+	 */
+	public function html(string $data = ''): Response {
+		$this->setFormatter(new HtmlResponseFormatter());
+		return $this->withData($data);
+	}
 
-		// Content
-		if (!isset($data)) {
-			$response = $response->withContent('{}');
-		} else {
-			$data = is_array($data) ? $data : ['data' => $data];
-			$content = JsonHelper::encode($data, $encodingOptions);
-			$response = $response->withContent($content);
-		}
+	/**
+	 * Return instance with the specified data
+	 *
+	 * @param mixed $data
+	 *
+	 * @return static
+	 */
+	public function withData($data) {
+		$clone = clone $this;
 
-		// Status code
-		$response = $response->withStatus($status);
+		$clone->data = $data;
+		return $clone;
+	}
 
-		return $response;
+	/**
+	 * @return mixed
+	 */
+	public function getData() {
+		return $this->data;
 	}
 
 	/**
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
-		$response = $this;
-
+		$response = $this->getFormatter()->formatter($this);
 		/**
 		 * Headers
 		 */
@@ -138,16 +158,10 @@ class Response extends \W7\Http\Message\Base\Response {
 			$this->swooleResponse->header($key, implode(';', $value));
 		}
 		/**
-		 * Cookies
+		 * @var Cookie $cookie
 		 */
-		foreach ((array)$this->cookies as $domain => $paths) {
-			foreach ($paths ?? [] as $path => $item) {
-				foreach ($item ?? [] as $name => $cookie) {
-					if ($cookie instanceof Cookie) {
-						$this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-					}
-				}
-			}
+		foreach ((array)$this->cookies as $name => $cookie) {
+			$this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
 		}
 
 		/**
@@ -182,18 +196,6 @@ class Response extends \W7\Http\Message\Base\Response {
 		$new = clone $this;
 		$new->stream = new SwooleStream($content);
 		return $new;
-	}
-
-	/**
-	 * Return an instance with specified cookies.
-	 *
-	 * @param Cookie $cookie
-	 * @return static
-	 */
-	public function withCookie(Cookie $cookie) {
-		$clone = clone $this;
-		$clone->cookies[$cookie->getDomain()][$cookie->getPath()][$cookie->getName()] = $cookie;
-		return $clone;
 	}
 
 	public function withFile(File $file) {

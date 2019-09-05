@@ -22,9 +22,12 @@ class RawResponseFormatter implements ResponseFormatterInterface {
 		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', 'text/plain');
 		$response->getCharset() && $response = $response->withCharset($response->getCharset());
 
-		// Content
-		$content = '';
 		$data = $response->getData();
+		if (!isset($data)) {
+			return $response;
+		}
+
+		$content = '';
 		if (is_scalar($data)) {
 			$content = (string)$data;
 		}

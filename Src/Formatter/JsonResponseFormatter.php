@@ -23,9 +23,7 @@ class JsonResponseFormatter implements ResponseFormatterInterface {
 
 		// Content
 		$data = $response->getData();
-		if (!isset($data)) {
-			$response = $response->withContent('{}');
-		} else {
+		if (isset($data)) {
 			$data = is_array($data) ? $data : ['data' => $data];
 			$content = JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
 			$response = $response->withContent($content);

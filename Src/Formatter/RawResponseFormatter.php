@@ -32,7 +32,6 @@ class RawResponseFormatter implements ResponseFormatterInterface {
 			$content = (string)$data;
 		}
 		if (is_object($data)) {
-			$content = '';
 			if (method_exists($data, '__toString')) {
 				$content = (string)$data;
 			}

@@ -26,6 +26,13 @@
 		"psr-4": {
 		}
 	},
+	"extra": {
+		"rangine": {
+			"providers": [
+				"W7\\Http\\Message\\ServiceProvider"
+			]
+		}
+	},
 	"scripts": {
 		"test": "./vendor/bin/phpunit -c phpunit.xml"
 	},

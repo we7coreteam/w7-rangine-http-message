@@ -13,6 +13,8 @@
 namespace W7\Http\Message;
 
 use W7\Core\Provider\ProviderAbstract;
+use W7\Http\Message\Formatter\JsonResponseFormatter;
+use W7\Http\Message\Formatter\ResponseFormatterInterface;
 
 class ServiceProvider extends ProviderAbstract {
 	/**
@@ -22,6 +24,7 @@ class ServiceProvider extends ProviderAbstract {
 	 */
 	public function register() {
 		$this->initCookieEnv();
+		$this->setResponseFormatter();
 	}
 
 	private function initCookieEnv() {
@@ -43,5 +46,11 @@ class ServiceProvider extends ProviderAbstract {
 		if (isset($config['expires']) && $config['expires'] >= 0) {
 			ini_set('session.cookie_lifetime', (int)$config['expires']);
 		}
+	}
+
+	private function setResponseFormatter() {
+		iloader()->set(ResponseFormatterInterface::class, function () {
+			return new JsonResponseFormatter();
+		});
 	}
 }

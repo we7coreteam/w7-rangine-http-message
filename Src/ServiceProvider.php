@@ -49,8 +49,10 @@ class ServiceProvider extends ProviderAbstract {
 	}
 
 	private function setResponseFormatter() {
-		iloader()->set(ResponseFormatterInterface::class, function () {
-			return new JsonResponseFormatter();
-		});
+		if (method_exists(iloader(), 'set')) {
+			iloader()->set(ResponseFormatterInterface::class, function () {
+				return new JsonResponseFormatter();
+			});
+		}
 	}
 }

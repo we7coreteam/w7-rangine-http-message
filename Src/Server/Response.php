@@ -135,6 +135,7 @@ class Response extends \W7\Http\Message\Base\Response {
 		$clone = clone $this;
 
 		$clone->data = $data;
+		$clone = $clone->getFormatter()->formatter($clone);
 		return $clone;
 	}
 
@@ -149,7 +150,7 @@ class Response extends \W7\Http\Message\Base\Response {
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
-		$response = $this->getFormatter()->formatter($this);
+		$response = $this;
 		/**
 		 * Headers
 		 */

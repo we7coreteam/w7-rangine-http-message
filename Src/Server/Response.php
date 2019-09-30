@@ -190,10 +190,6 @@ class Response extends \W7\Http\Message\Base\Response {
 	 * @return static
 	 */
 	public function withContent($content): Response {
-		if ($this->stream) {
-			return $this;
-		}
-
 		$new = clone $this;
 		$new->stream = new SwooleStream($content);
 		return $new;

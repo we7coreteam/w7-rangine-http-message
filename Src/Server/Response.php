@@ -116,7 +116,7 @@ class Response extends \W7\Http\Message\Base\Response {
 	}
 
 	/**
-	 * @param array $data
+	 * @param string $data
 	 * @return Response
 	 */
 	public function html(string $data = ''): Response {

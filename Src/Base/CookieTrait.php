@@ -24,17 +24,19 @@ trait CookieTrait {
 	 * @return CookieTrait
 	 */
 	public function setCookie(string $name, $value): self {
-		if (is_string($value)) {
+		if (is_object($value)) {
+			if (!($value instanceof Cookie)) {
+				throw new \RuntimeException('value must instance Cookie');
+			}
+			$value->setName($name);
+			$this->cookies[$name] = $value;
+		} elseif (is_array($value)) {
+			throw new \RuntimeException("value can't be an array");
+		} else {
 			$cookie = new Cookie([
 				'name' => $name,
 				'value' => $value
 			]);
-			$this->cookies[$name] = $cookie;
-		} elseif (is_object($value) && $value instanceof Cookie) {
-			$this->cookies[$name] = $value;
-		} elseif (is_array($value)) {
-			$value['name'] = $value['name'] ?? $name;
-			$cookie = new Cookie($value);
 			$this->cookies[$name] = $cookie;
 		}
 

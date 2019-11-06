@@ -19,7 +19,7 @@
 			"W7\\Http\\Message\\": "src/"
 		},
 		"files": [
-			"Src/Helper/Functions.php"
+			"src/Helper/Functions.php"
 		]
 	},
 	"extra": {

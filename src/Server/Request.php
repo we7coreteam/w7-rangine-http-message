@@ -199,7 +199,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			$uri = $uri->withHost($host);
 		}
 
-		if (! $hasPort && isset($server['server_port'])) {
+		if (! $hasPort && !empty($server['server_port'])) {
 			$uri = $uri->withPort($server['server_port']);
 		}
 

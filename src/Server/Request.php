@@ -233,6 +233,36 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	}
 
 	/**
+	 * 附加 $_SERVER 的信息
+	 * @param array $server
+	 * @return Request
+	 */
+	public function withServerParams(array $server) {
+		$clone = clone $this;
+		$header = $this->header();
+
+		$clone->serverParams = [
+			'QUERY_STRING' => $server['query_string'],
+			'REQUEST_URI' => $server['request_uri'],
+			'REQUEST_METHOD' => $server['request_method'],
+			'REQUEST_TIME_FLOAT' => $server['request_time_float'],
+			'REQUEST_TIME' => $server['request_time'],
+			'SERVER_PROTOCOL' => $server['server_protocol'],
+			'SERVER_PORT' => $server['server_port'],
+			'REMOTE_PORT' => $server['remote_port'],
+			'REMOTE_ADDR' => $server['remote_addr'],
+			'MASTER_TIME' => $server['master_time'],
+			'HTTP_USER_AGENT' => $header['user-agent'][0] ?? '',
+			'HTTP_ACCEPT_LANGUAGE' => $header['accept-language'][0] ?? '',
+			'HTTP_ACCEPT_ENCODING' => $header['accept-encoding'][0] ?? '',
+			'HTTP_ACCEPT' => $header['accept'][0] ?? '',
+			'HTTP_HOST' => $header['host'][0] ?? '',
+			'HTTP_CACHE_CONTROL' => $header['cache-control'][0] ?? '',
+		];
+		return $clone;
+	}
+
+	/**
 	 * Retrieve cookies.
 	 * Retrieves cookies sent by the client to the server.
 	 * The data MUST be compatible with the structure of the $_COOKIE

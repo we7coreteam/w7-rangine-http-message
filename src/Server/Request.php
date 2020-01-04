@@ -87,8 +87,10 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		$protocol = isset($server['server_protocol']) ? str_replace('HTTP/', '', $server['server_protocol']) : '1.1';
 		$request = new static($method, $uri, $headers, $body, $protocol);
 		return $request->withCookieParams($swooleRequest->cookie ?? [])
+					   ->withServerParams($server ?? [])
 					   ->withQueryParams($swooleRequest->get ?? [])
 					   ->withParsedBody($swooleRequest->post ?? [])
+					   ->withBodyParams($swooleRequest->rawContent())
 					   ->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
 					   ->setSwooleRequest($swooleRequest);
 	}

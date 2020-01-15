@@ -17,10 +17,10 @@ class Cookie {
 	public static $DEFAULTS = [
 		'value'    => '',
 		'domain'   => null,
-		'path'     => null,
-		'expires'  => null,
+		'path'     => '',
+		'expires'  => 0,
 		'secure'   => null,
-		'httpOnly' => null
+		'httpOnly' => false
 	];
 
 	/**

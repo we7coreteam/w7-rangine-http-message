@@ -30,19 +30,11 @@ class ServiceProvider extends ProviderAbstract {
 
 	private function initCookieEnv() {
 		$config = $this->config->getUserAppConfig('cookie');
-
-		if (isset($config['http_only'])) {
-			Cookie::$DEFAULTS['httpOnly'] = $config['http_only'];
-		}
-		if (isset($config['path'])) {
-			Cookie::$DEFAULTS['path'] = $config['path'];
-		}
-		if (isset($config['domain'])) {
-			Cookie::$DEFAULTS['domain'] = $config['domain'];
-		}
-		if (isset($config['secure'])) {
-			Cookie::$DEFAULTS['secure'] = $config['secure'];
-		}
+		Cookie::$DEFAULTS['httpOnly'] = isset($config['http_only']) ? $config['http_only'] : ini_get('session.cookie_httponly');
+		Cookie::$DEFAULTS['path'] = isset($config['path']) ? $config['path'] : ini_get('session.cookie_path');
+		Cookie::$DEFAULTS['domain'] = isset($config['domain']) ? $config['domain'] : ini_get('session.cookie_domain');
+		Cookie::$DEFAULTS['secure'] = isset($config['secure']) ? $config['secure'] : ini_get('session.cookie_secure');
+		Cookie::$DEFAULTS['expires'] = ini_get('session.gc_maxlifetime');
 		$config = $this->config->getUserAppConfig('session');
 		if (isset($config['expires']) && $config['expires'] >= 0) {
 			Cookie::$DEFAULTS['expires'] = (int)$config['expires'];

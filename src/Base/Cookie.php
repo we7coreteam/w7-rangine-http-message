@@ -14,7 +14,7 @@ class Cookie {
 	/**
 	 * Default cookie properties
 	 */
-	public const DEFAULTS = [
+	public static $DEFAULTS = [
 		'value'    => '',
 		'domain'   => null,
 		'path'     => null,
@@ -190,7 +190,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getPath(): string {
-		return !isset($this->path) ? ini_get('session.cookie_path') : $this->path;
+		return !isset($this->path) ? static::$DEFAULTS['path'] : $this->path;
 	}
 
 	/**
@@ -207,7 +207,7 @@ class Cookie {
 	 * @return string
 	 */
 	public function getDomain(): string {
-		return !isset($this->domain) ? ini_get('session.cookie_domain') : $this->domain;
+		return !isset($this->domain) ? static::$DEFAULTS['domain'] : $this->domain;
 	}
 
 	/**
@@ -225,7 +225,7 @@ class Cookie {
 	 */
 	public function getExpires(): int {
 		if (!isset($this->expires)) {
-			$defaultExpires = ini_get('session.cookie_lifetime');
+			$defaultExpires = static::$DEFAULTS['expires'];
 			return $defaultExpires == 0 ? 0 : (time() + $defaultExpires);
 		}
 		return $this->expires;
@@ -245,7 +245,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isSecure(): bool {
-		return !isset($this->secure) ? ini_get('session.cookie_secure') : $this->secure;
+		return !isset($this->secure) ? static::$DEFAULTS['secure'] : $this->secure;
 	}
 
 	/**
@@ -262,7 +262,7 @@ class Cookie {
 	 * @return bool
 	 */
 	public function isHttpOnly(): bool {
-		return !isset($this->httpOnly) ? ini_get('session.cookie_httponly') : $this->httpOnly;
+		return !isset($this->httpOnly) ? static::$DEFAULTS['httpOnly'] : $this->httpOnly;
 	}
 
 	/**

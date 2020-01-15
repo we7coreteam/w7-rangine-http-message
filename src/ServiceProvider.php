@@ -13,6 +13,7 @@
 namespace W7\Http\Message;
 
 use W7\Core\Provider\ProviderAbstract;
+use W7\Http\Message\Base\Cookie;
 use W7\Http\Message\Formatter\JsonResponseFormatter;
 use W7\Http\Message\Formatter\ResponseFormatterInterface;
 
@@ -31,20 +32,20 @@ class ServiceProvider extends ProviderAbstract {
 		$config = $this->config->getUserAppConfig('cookie');
 
 		if (isset($config['http_only'])) {
-			ini_set('session.cookie_httponly', $config['http_only']);
+			Cookie::$DEFAULTS['httpOnly'] = $config['http_only'];
 		}
 		if (isset($config['path'])) {
-			ini_set('session.cookie_path', $config['path']);
+			Cookie::$DEFAULTS['path'] = $config['path'];
 		}
 		if (isset($config['domain'])) {
-			ini_set('session.cookie_domain', $config['domain']);
+			Cookie::$DEFAULTS['domain'] = $config['domain'];
 		}
 		if (isset($config['secure'])) {
-			ini_set('session.cookie_secure', $config['secure']);
+			Cookie::$DEFAULTS['secure'] = $config['secure'];
 		}
 		$config = $this->config->getUserAppConfig('session');
 		if (isset($config['expires']) && $config['expires'] >= 0) {
-			ini_set('session.cookie_lifetime', (int)$config['expires']);
+			Cookie::$DEFAULTS['expires'] = (int)$config['expires'];
 		}
 	}
 

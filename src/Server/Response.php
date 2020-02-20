@@ -147,29 +147,30 @@ class Response extends \W7\Http\Message\Base\Response {
 	}
 
 	/**
+	 * @return \Swoole\Http\Response
+	 */
+	public function getSwooleResponse(): \Swoole\Http\Response {
+		return $this->swooleResponse;
+	}
+
+	/**
+	 * 不关闭连接，持续向客户端写入数据
+	 * 相当于 flush() 强制输出缓冲区内容到浏览器
+	 * 也可以用于发送Chunk数据
+	 */
+	public function write() {
+		$response = $this->withSendHeader();
+		/**
+		 * Body
+		 */
+		$this->swooleResponse->write($response->getBody()->getContents());
+	}
+
+	/**
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
-		$response = $this;
-		/**
-		 * Headers
-		 */
-		// Write Headers to swoole response
-		foreach ($response->getHeaders() as $key => $value) {
-			$this->swooleResponse->header($key, implode(';', $value));
-		}
-		/**
-		 * @var Cookie $cookie
-		 */
-		foreach ((array)$this->cookies as $name => $cookie) {
-			$this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-		}
-
-		/**
-		 * Status code
-		 */
-		$this->swooleResponse->status($response->getStatusCode());
-
+		$response = $this->withSendHeader();
 		/**
 		 * 发送文件, 调用 sendfile 不必再调用 send
 		 */
@@ -232,5 +233,29 @@ class Response extends \W7\Http\Message\Base\Response {
 	 */
 	public function isMatchAccept(string $accept, string $keyword): bool {
 		return strpos($accept, $keyword) !== false;
+	}
+
+	private function withSendHeader() {
+		$response = $this;
+		/**
+		 * Headers
+		 */
+		// Write Headers to swoole response
+		foreach ($response->getHeaders() as $key => $value) {
+			$this->swooleResponse->header($key, implode(';', $value));
+		}
+		/**
+		 * @var Cookie $cookie
+		 */
+		foreach ((array)$this->cookies as $name => $cookie) {
+			$this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+		}
+
+		/**
+		 * Status code
+		 */
+		$this->swooleResponse->status($response->getStatusCode());
+
+		return $response;
 	}
 }

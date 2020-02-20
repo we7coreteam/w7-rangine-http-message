@@ -10,6 +10,8 @@ ADD 下载文件　sendfile
 
 ADD 获取上传文件对象
 
+Add Write方法，不中断Http连接，向客户端发送内容
+
 FIXED response不能返回0
 
 FIXED 优化整理代码

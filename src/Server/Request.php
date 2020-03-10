@@ -17,6 +17,7 @@ use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Uri\Uri;
 use W7\Http\Message\Stream\SwooleStream;
 use W7\Http\Message\Upload\UploadedFile;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Class Request
@@ -86,13 +87,62 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		$body = new SwooleStream($swooleRequest->rawContent());
 		$protocol = isset($server['server_protocol']) ? str_replace('HTTP/', '', $server['server_protocol']) : '1.1';
 		$request = new static($method, $uri, $headers, $body, $protocol);
+
+		//重新组装 SERVER 参数，尽量与 $_SERVER 一致
+		$serverParams = [
+			'QUERY_STRING' => $server['query_string'] ?? '',
+			'REQUEST_URI' => $server['request_uri'] ?? '',
+			'REQUEST_METHOD' => $server['request_method'] ?? 'GET',
+			'REQUEST_TIME_FLOAT' => $server['request_time_float'] ?? '',
+			'REQUEST_TIME' => $server['request_time'] ?? '',
+			'SERVER_PROTOCOL' => $server['server_protocol'] ?? '',
+			'SERVER_PORT' => $server['server_port'] ?? '',
+			'REMOTE_PORT' => $server['remote_port'] ?? '',
+			'REMOTE_ADDR' => $server['remote_addr'] ?? '',
+			'MASTER_TIME' => $server['master_time'] ?? '',
+			'HTTP_USER_AGENT' => $headers['user-agent'] ?? '',
+			'HTTP_ACCEPT_LANGUAGE' => $headers['accept-language'] ?? '',
+			'HTTP_ACCEPT_ENCODING' => $headers['accept-encoding'] ?? '',
+			'HTTP_ACCEPT' => $headers['accept'] ?? '',
+			'HTTP_HOST' => $headers['host'] ?? '',
+			'HTTP_CACHE_CONTROL' => $headers['cache-control'] ?? '',
+		];
+print_r($swooleRequest->files);
 		return $request->withCookieParams($swooleRequest->cookie ?? [])
-					   ->withServerParams($server ?? [])
+					   ->withServerParams($serverParams)
 					   ->withQueryParams($swooleRequest->get ?? [])
 					   ->withParsedBody($swooleRequest->post ?? [])
 					   ->withBodyParams($swooleRequest->rawContent())
 					   ->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
 					   ->setSwooleRequest($swooleRequest);
+	}
+
+	public static function loadFromFpmRequest() {
+		$symfonyRequest = SymfonyRequest::createFromGlobals();
+print_r($symfonyRequest->files->all());exit;
+		$protocol = $symfonyRequest->getProtocolVersion() ?? '1.1';
+		$protocol = str_replace('HTTP/', '', $protocol);
+
+		$body = $symfonyRequest->getContent();
+		if (!empty($body)) {
+			$body = new SwooleStream($body);
+		}
+
+		$request = new static(
+			$symfonyRequest->getMethod() ?? 'GET',
+			$symfonyRequest->getUri(),
+			$symfonyRequest->headers->all(),
+			$body,
+			$protocol
+		);
+
+		return $request->withCookieParams($symfonyRequest->cookies->all() ?? [])
+			->withServerParams($symfonyRequest->server->all() ?? [])
+			->withQueryParams($symfonyRequest->query->all() ?? [])
+			->withParsedBody($symfonyRequest->request->all() ?? [])
+			->withBodyParams($symfonyRequest->getContent())
+			->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
+			->setSwooleRequest($swooleRequest);
 	}
 
 	/**
@@ -241,26 +291,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 */
 	public function withServerParams(array $server) {
 		$clone = clone $this;
-		$header = $this->header();
-
-		$clone->serverParams = [
-			'QUERY_STRING' => $server['query_string'] ?? '',
-			'REQUEST_URI' => $server['request_uri'] ?? '',
-			'REQUEST_METHOD' => $server['request_method'] ?? 'GET',
-			'REQUEST_TIME_FLOAT' => $server['request_time_float'] ?? '',
-			'REQUEST_TIME' => $server['request_time'] ?? '',
-			'SERVER_PROTOCOL' => $server['server_protocol'] ?? '',
-			'SERVER_PORT' => $server['server_port'] ?? '',
-			'REMOTE_PORT' => $server['remote_port'] ?? '',
-			'REMOTE_ADDR' => $server['remote_addr'] ?? '',
-			'MASTER_TIME' => $server['master_time'] ?? '',
-			'HTTP_USER_AGENT' => $header['user-agent'][0] ?? '',
-			'HTTP_ACCEPT_LANGUAGE' => $header['accept-language'][0] ?? '',
-			'HTTP_ACCEPT_ENCODING' => $header['accept-encoding'][0] ?? '',
-			'HTTP_ACCEPT' => $header['accept'][0] ?? '',
-			'HTTP_HOST' => $header['host'][0] ?? '',
-			'HTTP_CACHE_CONTROL' => $header['cache-control'][0] ?? '',
-		];
+		$clone->serverParams = $server;
 		return $clone;
 	}
 

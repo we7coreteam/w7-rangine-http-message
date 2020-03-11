@@ -261,6 +261,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			'HTTP_HOST' => $header['host'][0] ?? '',
 			'HTTP_CACHE_CONTROL' => $header['cache-control'][0] ?? '',
 		];
+		$clone->serverParams = array_merge($clone->serverParams, $server);
+
 		return $clone;
 	}
 

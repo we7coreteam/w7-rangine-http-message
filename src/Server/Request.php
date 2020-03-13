@@ -17,7 +17,6 @@ use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Uri\Uri;
 use W7\Http\Message\Stream\SwooleStream;
 use W7\Http\Message\Upload\UploadedFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**

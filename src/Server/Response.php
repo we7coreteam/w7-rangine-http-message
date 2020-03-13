@@ -12,6 +12,8 @@
 
 namespace W7\Http\Message\Server;
 
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Psr\Http\Message\ResponseInterface;
 use W7\Contract\Arrayable;
 use W7\Http\Message\Base\Cookie;
 use W7\Http\Message\Base\CookieTrait;
@@ -26,7 +28,7 @@ use W7\Http\Message\Stream\SwooleStream;
  * Class Request
  * @package W7\Http\Message\Server
  */
-class Response extends \W7\Http\Message\Base\Response {
+class Response extends \W7\Http\Message\Base\Response implements ResponseInterface {
 	use CookieTrait;
 
 	/**
@@ -61,7 +63,12 @@ class Response extends \W7\Http\Message\Base\Response {
 	public static function loadFromSwooleResponse(\Swoole\Http\Response $response) {
 		$self = new static();
 		$self->swooleResponse = $response;
-		return  $self;
+		return $self;
+	}
+
+	public static function loadFromFpm() {
+		$self = new static();
+		return $self;
 	}
 
 	/**

@@ -17,6 +17,7 @@ use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Uri\Uri;
 use W7\Http\Message\Stream\SwooleStream;
 use W7\Http\Message\Upload\UploadedFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
@@ -107,19 +108,22 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			'HTTP_HOST' => $headers['host'] ?? '',
 			'HTTP_CACHE_CONTROL' => $headers['cache-control'] ?? '',
 		];
-print_r($swooleRequest->files);
+
 		return $request->withCookieParams($swooleRequest->cookie ?? [])
-					   ->withServerParams($serverParams)
-					   ->withQueryParams($swooleRequest->get ?? [])
-					   ->withParsedBody($swooleRequest->post ?? [])
-					   ->withBodyParams($swooleRequest->rawContent())
-					   ->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
-					   ->setSwooleRequest($swooleRequest);
+				->withServerParams($serverParams)
+				->withQueryParams($swooleRequest->get ?? [])
+				->withParsedBody($swooleRequest->post ?? [])
+				->withBodyParams($swooleRequest->rawContent())
+				->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
+				->setSwooleRequest($swooleRequest);
 	}
 
 	public static function loadFromFpmRequest() {
+		//自行组装上传文件对象，避免对象转换来转换去
+		$files = $_FILES ?? [];
+		$_FILES = [];
+
 		$symfonyRequest = SymfonyRequest::createFromGlobals();
-print_r($symfonyRequest->files->all());exit;
 		$protocol = $symfonyRequest->getProtocolVersion() ?? '1.1';
 		$protocol = str_replace('HTTP/', '', $protocol);
 
@@ -137,16 +141,15 @@ print_r($symfonyRequest->files->all());exit;
 		);
 
 		return $request->withCookieParams($symfonyRequest->cookies->all() ?? [])
-			->withServerParams($symfonyRequest->server->all() ?? [])
-			->withQueryParams($symfonyRequest->query->all() ?? [])
-			->withParsedBody($symfonyRequest->request->all() ?? [])
-			->withBodyParams($symfonyRequest->getContent())
-			->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
-			->setSwooleRequest($swooleRequest);
+				->withServerParams($symfonyRequest->server->all() ?? [])
+				->withQueryParams($symfonyRequest->query->all() ?? [])
+				->withParsedBody($symfonyRequest->request->all() ?? [])
+				->withBodyParams($symfonyRequest->getContent())
+				->withUploadedFiles(self::normalizeFiles($files));
 	}
 
 	/**
-	 * Return an UploadedFile instance array.
+	 * Return an SymfonyUploadedFile instance array.
 	 *
 	 * @param array $files A array which respect $_FILES structure
 	 * @throws \InvalidArgumentException for unrecognized values
@@ -154,7 +157,6 @@ print_r($symfonyRequest->files->all());exit;
 	 */
 	private static function normalizeFiles(array $files) {
 		$normalized = [];
-
 		foreach ($files as $key => $value) {
 			if ($value instanceof UploadedFileInterface) {
 				$normalized[$key] = $value;
@@ -167,7 +169,6 @@ print_r($symfonyRequest->files->all());exit;
 				throw new \InvalidArgumentException('Invalid value in files specification');
 			}
 		}
-
 		return $normalized;
 	}
 
@@ -184,7 +185,7 @@ print_r($symfonyRequest->files->all());exit;
 			return self::normalizeNestedFileSpec($value);
 		}
 
-		return new UploadedFile($value['tmp_name'], (int)$value['size'], (int)$value['error'], $value['name'], $value['type']);
+		return new UploadedFile($value['tmp_name'], $value['name'], $value['type'], (int)$value['error']);
 	}
 
 	/**

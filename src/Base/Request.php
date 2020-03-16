@@ -20,7 +20,7 @@ use W7\Http\Message\Uri\Uri;
  * Class Request
  * @package W7\Http\Message\Base
  */
-class Request implements RequestInterface {
+abstract class Request implements RequestInterface {
 	use MessageTrait;
 
 	/**

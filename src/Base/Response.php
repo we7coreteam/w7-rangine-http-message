@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class Response
  * @package W7\Http\Message\Base
  */
-class Response implements ResponseInterface {
+abstract class Response implements ResponseInterface {
 	use MessageTrait;
 
 	/** @var array Map of standard HTTP status code/reason phrases */

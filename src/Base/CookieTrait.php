@@ -33,10 +33,7 @@ trait CookieTrait {
 		} elseif (is_array($value)) {
 			throw new \RuntimeException("value can't be an array");
 		} else {
-			$cookie = new Cookie([
-				'name' => $name,
-				'value' => $value
-			]);
+			$cookie = Cookie::create($name, $value);
 			$this->cookies[$name] = $cookie;
 		}
 

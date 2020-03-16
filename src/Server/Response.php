@@ -12,6 +12,8 @@
 
 namespace W7\Http\Message\Server;
 
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Psr\Http\Message\ResponseInterface;
 use W7\Contract\Arrayable;
 use W7\Http\Message\Base\Cookie;
 use W7\Http\Message\Base\CookieTrait;
@@ -20,13 +22,14 @@ use W7\Http\Message\Formatter\HtmlResponseFormatter;
 use W7\Http\Message\Formatter\JsonResponseFormatter;
 use W7\Http\Message\Formatter\RawResponseFormatter;
 use W7\Http\Message\Formatter\ResponseFormatterInterface;
+use W7\Http\Message\Outputer\ResponseOutputerInterface;
 use W7\Http\Message\Stream\SwooleStream;
 
 /**
  * Class Request
  * @package W7\Http\Message\Server
  */
-class Response extends \W7\Http\Message\Base\Response {
+class Response extends \W7\Http\Message\Base\Response implements ResponseInterface {
 	use CookieTrait;
 
 	/**
@@ -47,29 +50,17 @@ class Response extends \W7\Http\Message\Base\Response {
 	protected $exception;
 
 	/**
-	 * swoole响应请求
-	 *
-	 * @var \Swoole\Http\Response
-	 */
-	protected $swooleResponse;
-
-	/**
 	 * @var ResponseFormatterInterface
 	 */
 	protected $formatter;
 
-	public static function loadFromSwooleResponse(\Swoole\Http\Response $response) {
-		$self = new static();
-		$self->swooleResponse = $response;
-		return  $self;
-	}
-
 	/**
-	 * 初始化响应请求
-	 *
-	 * @param \Swoole\Http\Response $response
+	 * @var ResponseOutputerInterface
 	 */
+	protected $outputer;
+
 	public function __construct() {
+
 	}
 
 	public function setFormatter(ResponseFormatterInterface $formatter) {
@@ -82,6 +73,21 @@ class Response extends \W7\Http\Message\Base\Response {
 		}
 
 		return $this->formatter;
+	}
+
+	/**
+	 * 设置输出器，Swoole Fpm WebSocket Tcp
+	 * @param ResponseOutputerInterface $outputer
+	 */
+	public function setOutputer(ResponseOutputerInterface $outputer): void {
+		$this->outputer = $outputer;
+	}
+
+	/**
+	 * @return ResponseOutputerInterface
+	 */
+	private function getOutputer(): ResponseOutputerInterface {
+		return $this->outputer;
 	}
 
 	/**
@@ -147,40 +153,28 @@ class Response extends \W7\Http\Message\Base\Response {
 	}
 
 	/**
-	 * @return \Swoole\Http\Response
-	 */
-	public function getSwooleResponse(): \Swoole\Http\Response {
-		return $this->swooleResponse;
-	}
-
-	/**
 	 * 不关闭连接，持续向客户端写入数据
 	 * 相当于 flush() 强制输出缓冲区内容到浏览器
 	 * 也可以用于发送Chunk数据
 	 */
 	public function write() {
-		$response = $this->withSendHeader();
-		/**
-		 * Body
-		 */
-		$this->swooleResponse->write($response->getBody()->getContents());
+		$this->withSendHeader();
+		$this->getOutputer()->sendChunk($this->getBody()->getContents());
 	}
 
 	/**
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
-		$response = $this->withSendHeader();
+		$this->withSendHeader();
+
 		/**
 		 * 发送文件, 调用 sendfile 不必再调用 send
 		 */
 		if (!empty($this->file)) {
-			$this->swooleResponse->sendfile($this->file->getFilename(), $this->file->getOffset(), $this->file->getLength());
+			return $this->getOutputer()->sendFile($this->file);
 		} else {
-			/**
-			 * Body
-			 */
-			$this->swooleResponse->end($response->getBody()->getContents());
+			return $this->getOutputer()->sendBody($this->getBody()->getContents());
 		}
 	}
 
@@ -236,26 +230,9 @@ class Response extends \W7\Http\Message\Base\Response {
 	}
 
 	private function withSendHeader() {
-		$response = $this;
-		/**
-		 * Headers
-		 */
-		// Write Headers to swoole response
-		foreach ($response->getHeaders() as $key => $value) {
-			$this->swooleResponse->header($key, implode(';', $value));
-		}
-		/**
-		 * @var Cookie $cookie
-		 */
-		foreach ((array)$this->cookies as $name => $cookie) {
-			$this->swooleResponse->cookie($cookie->getName(), $cookie->getValue() ? : 1, $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-		}
-
-		/**
-		 * Status code
-		 */
-		$this->swooleResponse->status($response->getStatusCode());
-
-		return $response;
+		$this->getOutputer()->sendHeader($this->getHeaders());
+		$this->getOutputer()->sendCookie($this->getCookies());
+		$this->getOutputer()->sendStatus($this->getStatusCode());
+		return $this;
 	}
 }

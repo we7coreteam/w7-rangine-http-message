@@ -34,7 +34,7 @@
 		"test": "./vendor/bin/phpunit -c phpunit.xml"
 	},
 	"require-dev": {
-		"w7/rangine": "*",
-		"w7/php-cs-fixer": "^1.0"
+		"w7/php-cs-fixer": "^1.0",
+		"swoole/ide-helper": "^4.4"
 	}
 }

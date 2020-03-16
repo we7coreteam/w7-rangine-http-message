@@ -12,12 +12,60 @@
 
 namespace W7\Http\Message\Outputer;
 
+use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+
 class FpmResponseOutputer extends ResponseOutputerAbstract {
-	public function write() {
+	private $header = [];
+
+	static private $response;
+
+	/**
+	 * @return SymfonyResponse
+	 */
+	private static function getResponse() {
+		if (empty(self::$response)) {
+			self::$response = new SymfonyResponse();
+		}
+		return self::$response;
+	}
+
+	public function sendBody($content) {
+		self::getResponse()->setContent($content)->send();
+	}
+
+	public function sendHeader($headers) {
+		if (empty($headers)) {
+			return true;
+		}
+		foreach ($headers as $key => $value) {
+			self::getResponse()->headers->set($key, implode(';', $value));
+		}
+
+		return true;
+	}
+
+	public function sendCookie($cookies) {
+		if (empty($cookies)) {
+			return true;
+		}
+
+		foreach ($cookies as $key => $value) {
+			self::getResponse()->headers->setCookie($value);
+		}
+
+		return true;
+	}
+
+	public function sendStatus($code) {
+		self::getResponse()->setStatusCode($code);
+	}
+
+	public function sendFile($file) {
 
 	}
 
-	public function send() {
+	public function sendChunk($content) {
 
 	}
 }

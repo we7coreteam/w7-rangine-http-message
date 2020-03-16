@@ -10,7 +10,8 @@
 	"description": "rangine http message",
 	"license": "Apache-2.0",
 	"require": {
-		"psr/http-message": "^1.0"
+		"psr/http-message": "^1.0",
+		"symfony/http-foundation": "*"
 	},
 	"autoload": {
 		"classmap": [
@@ -33,6 +34,7 @@
 		"test": "./vendor/bin/phpunit -c phpunit.xml"
 	},
 	"require-dev": {
-		"w7/php-cs-fixer": "^1.0"
+		"w7/php-cs-fixer": "^1.0",
+		"swoole/ide-helper": "^4.4"
 	}
 }

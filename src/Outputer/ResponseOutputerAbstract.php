@@ -12,17 +12,7 @@
 
 namespace W7\Http\Message\Outputer;
 
-use W7\Http\Message\Server\Response;
 
 abstract class ResponseOutputerAbstract implements ResponseOutputerInterface {
-	protected $response = null;
 
-	/**
-	 * 设置标准响应对象
-	 * @param ResponseOutputerAbstract $response
-	 */
-	public function withResponse(Response $response): void {
-		$this->response = $response;
-		return $this;
-	}
 }

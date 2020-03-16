@@ -1,42 +1,34 @@
 <?php
 
 /**
- * Rangine Http Message
+ * WeEngine Api System
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
+ * This is not a free software
+ * Using it under the license terms
  * visited https://www.w7.cc for more details
  */
 
 namespace W7\Http\Message\File;
 
-class File {
-	protected $filename;
-	protected $offset;
-	protected $length;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
-	public function __construct(string $filename, int $offset = 0, int $length = 0) {
-		if (!file_exists($filename)) {
-			throw new \InvalidArgumentException('File not exists');
-		}
+class File extends SymfonyFile {
+
+	private $offset;
+	private $length;
+
+	public function __construct(string $path, int $offset = 0, int $length = 0, bool $checkPath = true) {
+		parent::__construct($path, $checkPath);
 
 		if (!empty($offset)) {
-			$filesize = filesize($filename);
-			if ($offset > $filesize) {
+			if ($offset > $this->getSize()) {
 				throw new \InvalidArgumentException('Out of file range');
 			}
 		}
-
-		$this->filename = $filename;
 		$this->offset = $offset;
 		$this->length = $length;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFilename(): string {
-		return $this->filename;
 	}
 
 	/**

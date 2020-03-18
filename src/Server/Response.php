@@ -1,26 +1,20 @@
 <?php
 
 /**
- * Rangine Http Message
+ * WeEngine Api System
  *
- * (c) We7Team 2019 <https://www.rangine.com/>
+ * (c) We7Team 2019 <https://www.w7.cc>
  *
- * document http://s.w7.cc/index.php?c=wiki&do=view&id=317&list=2284
- *
- * visited https://www.rangine.com/ for more details
+ * This is not a free software
+ * Using it under the license terms
+ * visited https://www.w7.cc for more details
  */
 
 namespace W7\Http\Message\Server;
 
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Psr\Http\Message\ResponseInterface;
-use W7\Contract\Arrayable;
-use W7\Http\Message\Base\Cookie;
 use W7\Http\Message\Base\CookieTrait;
 use w7\Http\Message\File\File;
-use W7\Http\Message\Formatter\HtmlResponseFormatter;
-use W7\Http\Message\Formatter\JsonResponseFormatter;
-use W7\Http\Message\Formatter\RawResponseFormatter;
 use W7\Http\Message\Formatter\ResponseFormatterInterface;
 use W7\Http\Message\Outputer\ResponseOutputerInterface;
 use W7\Http\Message\Stream\SwooleStream;
@@ -60,19 +54,6 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	protected $outputer;
 
 	public function __construct() {
-
-	}
-
-	public function setFormatter(ResponseFormatterInterface $formatter) {
-		$this->formatter = $formatter;
-	}
-
-	public function getFormatter() : ResponseFormatterInterface {
-		if (!$this->formatter) {
-			$this->formatter = new JsonResponseFormatter();
-		}
-
-		return $this->formatter;
 	}
 
 	/**
@@ -88,68 +69,6 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 */
 	private function getOutputer(): ResponseOutputerInterface {
 		return $this->outputer;
-	}
-
-	/**
-	 * Redirect to a URL
-	 *
-	 * @param string   $url
-	 * @param null|int $status
-	 * @return static
-	 */
-	public function redirect($url, $status = 302) {
-		$response = $this;
-		$response = $response->withAddedHeader('Location', (string)$url)->withStatus($status);
-		return $response;
-	}
-
-	/**
-	 * @param string $data
-	 * @return Response
-	 */
-	public function raw(string $data = ''): Response {
-		$this->setFormatter(new RawResponseFormatter());
-		return $this->withData($data);
-	}
-
-	/**
-	 * @param array $data
-	 * @return Response
-	 */
-	public function json($data = []): Response {
-		$this->setFormatter(new JsonResponseFormatter());
-		return $this->withData($data);
-	}
-
-	/**
-	 * @param string $data
-	 * @return Response
-	 */
-	public function html(string $data = ''): Response {
-		$this->setFormatter(new HtmlResponseFormatter());
-		return $this->withData($data);
-	}
-
-	/**
-	 * Return instance with the specified data
-	 *
-	 * @param mixed $data
-	 *
-	 * @return static
-	 */
-	public function withData($data) {
-		$clone = clone $this;
-
-		$clone->data = $data;
-		$clone = $clone->getFormatter()->formatter($clone);
-		return $clone;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getData() {
-		return $this->data;
 	}
 
 	/**
@@ -196,43 +115,15 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 		return $clone;
 	}
 
-	/**
-	 * @return null|\Throwable
-	 */
-	public function getException() {
-		return $this->exception;
-	}
-
-	/**
-	 * @param \Throwable $exception
-	 * @return $this
-	 */
-	public function setException(\Throwable $exception) {
-		$this->exception = $exception;
-		return $this;
-	}
-
-	/**
-	 * @param mixed $value
-	 * @return bool
-	 */
-	public function isArrayable($value): bool {
-		return is_array($value) || $value instanceof Arrayable;
-	}
-
-	/**
-	 * @param string $accept
-	 * @param string $keyword
-	 * @return bool
-	 */
-	public function isMatchAccept(string $accept, string $keyword): bool {
-		return strpos($accept, $keyword) !== false;
-	}
-
 	private function withSendHeader() {
-		$this->getOutputer()->sendHeader($this->getHeaders());
-		$this->getOutputer()->sendCookie($this->getCookies());
-		$this->getOutputer()->sendStatus($this->getStatusCode());
+		$response = $this;
+
+		if (strpos($this->getContentType(), 'charset=') === false) {
+			$response = $this->withCharset($this->getCharset());
+		}
+		$this->getOutputer()->sendHeader($response->getHeaders());
+		$this->getOutputer()->sendCookie($response->getCookies());
+		$this->getOutputer()->sendStatus($response->getStatusCode());
 		return $this;
 	}
 }

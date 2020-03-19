@@ -12,13 +12,12 @@
 
 namespace W7\Http\Message\Outputer;
 
-use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class FpmResponseOutputer extends ResponseOutputerAbstract {
 	private $header = [];
 
-	static private $response;
+	private static $response;
 
 	/**
 	 * @return SymfonyResponse
@@ -38,6 +37,7 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 		if (empty($headers)) {
 			return true;
 		}
+
 		foreach ($headers as $key => $value) {
 			self::getResponse()->headers->set($key, implode(';', $value));
 		}
@@ -62,10 +62,8 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendFile($file) {
-
 	}
 
 	public function sendChunk($content) {
-
 	}
 }

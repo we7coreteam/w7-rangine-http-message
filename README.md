@@ -1,7 +1,8 @@
 # we7HttpMessage
 
-swoole request / response 的 psr 标准的实现，fork 自  Swoft Http-message 组件，感谢 Swoft 团队
-兼容Fpm模式和Swoole Server模式，根据不同的来源来构造 Request 和 Response
+swoole request / response 的 psr 标准的实现，fork 自  Swoft Http-message 组件，感谢 Swoft 团队。
+
+支持下载文件及发送文件Chunk。兼容Fpm模式和Swoole Server模式，根据不同的来源来构造 Request 和 Response
 
 # use 
 

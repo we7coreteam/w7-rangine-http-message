@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WeEngine Api System
+ * Rangine Http Message
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
@@ -15,7 +15,6 @@ namespace W7\Http\Message\Server;
 use Psr\Http\Message\ResponseInterface;
 use W7\Http\Message\Base\CookieTrait;
 use w7\Http\Message\File\File;
-use W7\Http\Message\Formatter\ResponseFormatterInterface;
 use W7\Http\Message\Outputer\ResponseOutputerInterface;
 use W7\Http\Message\Stream\SwooleStream;
 
@@ -42,11 +41,6 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * @var \Throwable|null
 	 */
 	protected $exception;
-
-	/**
-	 * @var ResponseFormatterInterface
-	 */
-	protected $formatter;
 
 	/**
 	 * @var ResponseOutputerInterface

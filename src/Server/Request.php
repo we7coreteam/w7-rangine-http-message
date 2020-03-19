@@ -5,6 +5,8 @@
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
+ * This is not a free software
+ * Using it under the license terms
  * visited https://www.w7.cc for more details
  */
 
@@ -12,8 +14,10 @@ namespace W7\Http\Message\Server;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Swoole\WebSocket\Frame;
 use W7\Http\Message\Contract\Session;
 use W7\Http\Message\Server\Concerns\InteractsWithInput;
+use W7\Http\Message\Stream\FrameStream;
 use W7\Http\Message\Uri\Uri;
 use W7\Http\Message\Stream\SwooleStream;
 use W7\Http\Message\Upload\UploadedFile;
@@ -145,6 +149,15 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 				->withParsedBody($symfonyRequest->request->all() ?? [])
 				->withBodyParams($symfonyRequest->getContent())
 				->withUploadedFiles(self::normalizeFiles($files));
+	}
+
+	public function loadFromWSFrame(Frame $frame) {
+		$frameStream = new FrameStream($frame->data, $frame->opcode);
+		$uri = $this->getUri()->withPath($frameStream->getUri());
+		$request = $this->withMethod($frameStream->getMethod())
+						->withBodyParams($frameStream->getBody())
+						->withUri($uri, true);
+		return $request;
 	}
 
 	/**

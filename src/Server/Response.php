@@ -92,6 +92,13 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	}
 
 	/**
+	 * 适用于长连接或是http发送chunk数据时主动关闭连接
+	 */
+	public function close() {
+		return $this->getOutputer()->disConnect();
+	}
+
+	/**
 	 * 设置Body内容，使用默认的Stream
 	 *
 	 * @param string $content

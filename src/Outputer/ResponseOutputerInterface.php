@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WeEngine Api System
+ * Rangine Http Message
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
@@ -55,4 +55,5 @@ interface ResponseOutputerInterface {
 	 */
 	public function sendStatus(int $code);
 
+	public function disConnect();
 }

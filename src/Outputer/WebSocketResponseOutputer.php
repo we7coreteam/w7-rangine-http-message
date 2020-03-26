@@ -27,8 +27,7 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendBody($content) {
-		$this->response->push($this->fd, $content);
-		return $this->response->disconnect($this->fd);
+		return $this->response->push($this->fd, $content);
 	}
 
 	public function sendHeader($headers) {
@@ -44,6 +43,10 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendChunk($content) {
-		return $this->response->push($this->fd, $content);
+		return $this->sendBody($content);
+	}
+
+	public function disConnect() {
+		return $this->response->disconnect($this->fd);
 	}
 }

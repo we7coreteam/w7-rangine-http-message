@@ -15,7 +15,7 @@ namespace W7\Http\Message\Stream;
 /**
  * 数据格式
  * {
- *      method[GET|POST|DELETE...],
+ *      method|cmd[GET|POST|DELETE...],
  *      uri,
  *      data,
  *      header : {
@@ -32,7 +32,7 @@ class FrameStream {
 
 	private $body = '';
 	private $method = 'POST';
-	private $uri = '/';
+	private $uri = '';
 
 	public function __construct($data, $opcode = self::OPCODE_TEXT) {
 		if ($opcode == self::OPCODE_BINARY) {
@@ -51,12 +51,19 @@ class FrameStream {
 
 	protected function unpackText($data) {
 		$dataJson = \json_decode($data, true);
+		var_dump($dataJson);
 		if (\json_last_error() != JSON_ERROR_NONE) {
 			$this->body = $data;
 		} else {
 			$this->body = $dataJson['data'] ?? '';
+			$dataJson['method'] = $dataJson['method'] ?? $dataJson['cmd'];
 			$this->method = strtoupper($dataJson['method'] ?? $this->method);
-			$this->uri = '/' . trim($dataJson['uri'] ?? $this->uri, '/');
+
+			if (empty($dataJson['uri'])) {
+				$this->uri = '';
+			} else {
+				$this->uri = '/' . trim($dataJson['uri'], '/');
+			}
 		}
 
 		return true;

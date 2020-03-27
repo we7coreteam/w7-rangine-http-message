@@ -160,6 +160,15 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		return $request;
 	}
 
+	public function loadFromTcpData($data) {
+		$frameStream = new FrameStream($data, FrameStream::OPCODE_TEXT);
+		$uri = $this->getUri()->withPath($frameStream->getUri());
+		$request = $this->withMethod($frameStream->getMethod())
+			->withBodyParams($frameStream->getBody())
+			->withUri($uri, true);
+		return $request;
+	}
+
 	/**
 	 * Return an SymfonyUploadedFile instance array.
 	 *

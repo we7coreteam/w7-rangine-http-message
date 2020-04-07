@@ -15,6 +15,7 @@ namespace W7\Http\Message\Server;
 use Psr\Http\Message\ResponseInterface;
 use W7\Http\Message\Base\CookieTrait;
 use w7\Http\Message\File\File;
+use W7\Http\Message\Outputer\ResponseOutputerAbstract;
 use W7\Http\Message\Outputer\ResponseOutputerInterface;
 use W7\Http\Message\Stream\SwooleStream;
 
@@ -43,9 +44,11 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	protected $exception;
 
 	/**
-	 * @var ResponseOutputerInterface
+	 * @var ResponseOutputerAbstract
 	 */
 	protected $outputer;
+
+	protected $fd = null;
 
 	public function __construct() {
 	}
@@ -62,7 +65,11 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * @return ResponseOutputerInterface
 	 */
 	private function getOutputer(): ResponseOutputerInterface {
-		return $this->outputer;
+		if (!empty($this->fd)) {
+			return $this->outputer->withFd($this->fd);
+		} else {
+			return $this->outputer;
+		}
 	}
 
 	/**
@@ -72,6 +79,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 */
 	public function write() {
 		$this->withSendHeader();
+
 		$this->getOutputer()->sendChunk($this->getBody()->getContents());
 	}
 
@@ -113,6 +121,12 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	public function withFile(File $file) {
 		$clone = clone $this;
 		$clone->file = $file;
+		return $clone;
+	}
+
+	public function withFd($fd) {
+		$clone = clone $this;
+		$clone->fd = $fd;
 		return $clone;
 	}
 

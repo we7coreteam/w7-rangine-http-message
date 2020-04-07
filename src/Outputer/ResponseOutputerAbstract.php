@@ -13,7 +13,18 @@
 namespace W7\Http\Message\Outputer;
 
 abstract class ResponseOutputerAbstract implements ResponseOutputerInterface {
+	protected $sendFd = null;
+
 	public function disConnect() {
 		return true;
+	}
+
+	public function withFd($fd) {
+		if (empty($fd)) {
+			return $this;
+		}
+		$clone = clone $this;
+		$clone->sendFd = $fd;
+		return $clone;
 	}
 }

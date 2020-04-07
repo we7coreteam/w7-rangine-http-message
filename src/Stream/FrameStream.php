@@ -56,7 +56,9 @@ class FrameStream {
 			$this->raw = $data;
 		} else {
 			$this->raw = $data;
-			$this->body = $dataJson['data'] ?? '';
+			if (is_array($dataJson['data'])) {
+				$this->body = $dataJson['data'];
+			}
 			$this->method = strtoupper($dataJson['method'] ?? $this->method);
 
 			if (!empty($dataJson['uri'])) {
@@ -67,9 +69,6 @@ class FrameStream {
 				$this->uri = '';
 			}
 		}
-
-		//尝试解data键中的数据，将来附加到post数据中
-
 		return true;
 	}
 

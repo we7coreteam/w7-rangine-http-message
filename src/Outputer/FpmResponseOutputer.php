@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WeEngine Api System
+ * Rangine Http Message
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
@@ -12,11 +12,11 @@
 
 namespace W7\Http\Message\Outputer;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class FpmResponseOutputer extends ResponseOutputerAbstract {
 	private $header = [];
-
 	private static $response;
 
 	/**
@@ -62,8 +62,21 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendFile($file) {
+		self::getResponse()->sendHeaders();
+		return BinaryFileResponse::create($file)->send();
 	}
 
 	public function sendChunk($content) {
+		if (!headers_sent()) {
+			header('Cache-Control: no-cache');
+			header('X-Accel-Buffering: no');
+		}
+		echo $content;
+		ob_flush();
+		flush();
+	}
+
+	public function disConnect() {
+		exit;
 	}
 }

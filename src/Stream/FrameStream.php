@@ -51,18 +51,18 @@ class FrameStream {
 
 	protected function unpackText($data) {
 		$dataJson = \json_decode($data, true);
-		var_dump($dataJson);
 		if (\json_last_error() != JSON_ERROR_NONE) {
 			$this->body = $data;
 		} else {
 			$this->body = $dataJson['data'] ?? '';
-			$dataJson['method'] = $dataJson['method'] ?? $dataJson['cmd'];
 			$this->method = strtoupper($dataJson['method'] ?? $this->method);
 
-			if (empty($dataJson['uri'])) {
-				$this->uri = '';
-			} else {
+			if (!empty($dataJson['uri'])) {
 				$this->uri = '/' . trim($dataJson['uri'], '/');
+			} elseif (!empty($dataJson['cmd'])) {
+				$this->uri = '/' . trim($dataJson['cmd'], '/');
+			} else {
+				$this->uri = '';
 			}
 		}
 

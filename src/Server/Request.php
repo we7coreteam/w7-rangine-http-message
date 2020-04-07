@@ -155,7 +155,9 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		$frameStream = new FrameStream($frame->data, $frame->opcode);
 		$uri = $this->getUri()->withPath($frameStream->getUri());
 		$request = $this->withMethod($frameStream->getMethod())
-						->withBodyParams($frameStream->getBody())
+						->withBody(new SwooleStream($frameStream->getRaw()))
+						->withBodyParams($frameStream->getRaw())
+						->withParsedBody($frameStream->getBody())
 						->withUri($uri, true);
 		return $request;
 	}
@@ -164,7 +166,9 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		$frameStream = new FrameStream($data, FrameStream::OPCODE_TEXT);
 		$uri = $this->getUri()->withPath($frameStream->getUri());
 		$request = $this->withMethod($frameStream->getMethod())
-			->withBodyParams($frameStream->getBody())
+			->withBody(new SwooleStream($frameStream->getRaw()))
+			->withBodyParams($frameStream->getRaw())
+			->withParsedBody($frameStream->getBody())
 			->withUri($uri, true);
 		return $request;
 	}

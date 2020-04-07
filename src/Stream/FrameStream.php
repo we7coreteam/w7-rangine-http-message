@@ -30,9 +30,10 @@ class FrameStream {
 	const OPCODE_BINARY = WEBSOCKET_OPCODE_BINARY;
 	const OPCODE_PING = WEBSOCKET_OPCODE_PING;
 
-	private $body = '';
+	private $body = [];
 	private $method = 'POST';
 	private $uri = '';
+	private $raw = '';
 
 	public function __construct($data, $opcode = self::OPCODE_TEXT) {
 		if ($opcode == self::OPCODE_BINARY) {
@@ -40,7 +41,7 @@ class FrameStream {
 		} elseif ($opcode == self::OPCODE_TEXT) {
 			$this->unpackText($data);
 		} else {
-			$this->body = $data;
+			$this->raw = $data;
 		}
 	}
 
@@ -52,8 +53,9 @@ class FrameStream {
 	protected function unpackText($data) {
 		$dataJson = \json_decode($data, true);
 		if (\json_last_error() != JSON_ERROR_NONE) {
-			$this->body = $data;
+			$this->raw = $data;
 		} else {
+			$this->raw = $data;
 			$this->body = $dataJson['data'] ?? '';
 			$this->method = strtoupper($dataJson['method'] ?? $this->method);
 
@@ -66,10 +68,12 @@ class FrameStream {
 			}
 		}
 
+		//尝试解data键中的数据，将来附加到post数据中
+
 		return true;
 	}
 
-	public function getBody(): string {
+	public function getBody() : array {
 		return $this->body;
 	}
 
@@ -79,5 +83,9 @@ class FrameStream {
 
 	public function getUri(): string {
 		return $this->uri;
+	}
+
+	public function getRaw(): string {
+		return $this->raw;
 	}
 }

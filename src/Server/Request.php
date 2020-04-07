@@ -112,13 +112,14 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			'HTTP_CACHE_CONTROL' => $headers['cache-control'] ?? '',
 		];
 
-		return $request->withCookieParams($swooleRequest->cookie ?? [])
+		$request = $request->withCookieParams($swooleRequest->cookie ?? [])
 				->withServerParams($serverParams)
 				->withQueryParams($swooleRequest->get ?? [])
 				->withParsedBody($swooleRequest->post ?? [])
 				->withBodyParams($swooleRequest->rawContent())
 				->withUploadedFiles(self::normalizeFiles($swooleRequest->files ?? []))
 				->setSwooleRequest($swooleRequest);
+		return $request;
 	}
 
 	public static function loadFromFpmRequest() {
@@ -129,7 +130,6 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 		$symfonyRequest = SymfonyRequest::createFromGlobals();
 		$protocol = $symfonyRequest->getProtocolVersion() ?? '1.1';
 		$protocol = str_replace('HTTP/', '', $protocol);
-
 		$body = $symfonyRequest->getContent();
 		if (!empty($body)) {
 			$body = new SwooleStream($body);
@@ -137,7 +137,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 
 		$request = new static(
 			$symfonyRequest->getMethod() ?? 'GET',
-			$symfonyRequest->getUri(),
+			$symfonyRequest->getPathInfo(),
 			$symfonyRequest->headers->all(),
 			$body,
 			$protocol

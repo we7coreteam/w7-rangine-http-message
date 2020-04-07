@@ -27,7 +27,11 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendBody($content) {
-		return $this->response->push($this->fd, $content);
+		if ($this->response->isEstablished($this->getFd())) {
+			return $this->response->push($this->getFd(), $content);
+		} else {
+			throw new \RuntimeException('Client(fd: ' . $this->getFd() . ') has lost connection');
+		}
 	}
 
 	public function sendHeader($headers) {
@@ -47,6 +51,14 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function disConnect() {
-		return $this->response->disconnect($this->fd);
+		return $this->response->disconnect($this->getFd());
+	}
+
+	private function getFd() {
+		if (!empty($this->sendFd)) {
+			return $this->sendFd;
+		} else {
+			return $this->fd;
+		}
 	}
 }

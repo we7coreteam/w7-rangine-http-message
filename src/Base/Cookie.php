@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WeEngine Api System
+ * Rangine Http Message
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
@@ -35,7 +35,7 @@ class Cookie extends SymfonyCookie {
 		is_null($secure) && $secure = self::$DEFAULTS['secure'];
 		is_null($httpOnly) && $httpOnly = boolval(self::$DEFAULTS['httpOnly']);
 
-		return SymfonyCookie::create($name, $value, $expire, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
+		return new self($name, $value, $expire, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
 	}
 
 	/**

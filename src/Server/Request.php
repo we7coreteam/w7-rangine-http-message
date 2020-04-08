@@ -111,7 +111,6 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			'HTTP_HOST' => $headers['host'] ?? '',
 			'HTTP_CACHE_CONTROL' => $headers['cache-control'] ?? '',
 		];
-
 		$request = $request->withCookieParams($swooleRequest->cookie ?? [])
 				->withServerParams($serverParams)
 				->withQueryParams($swooleRequest->get ?? [])

@@ -56,7 +56,7 @@ class FrameStream {
 			$this->raw = $data;
 		} else {
 			$this->raw = $data;
-			if (is_array($dataJson['data'])) {
+			if (!empty($dataJson['data']) && is_array($dataJson['data'])) {
 				$this->body = $dataJson['data'];
 			}
 			$this->method = strtoupper($dataJson['method'] ?? $this->method);

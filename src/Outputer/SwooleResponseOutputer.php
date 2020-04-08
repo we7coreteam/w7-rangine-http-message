@@ -70,7 +70,8 @@ class SwooleResponseOutputer extends ResponseOutputerAbstract {
 				$cookie->isSecure(),
 				$cookie->isHttpOnly()
 			);
-			return true;
 		}
+
+		return true;
 	}
 }

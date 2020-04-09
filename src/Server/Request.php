@@ -12,6 +12,7 @@
 
 namespace W7\Http\Message\Server;
 
+use function GuzzleHttp\Psr7\parse_query;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Swoole\WebSocket\Frame;
@@ -168,6 +169,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			->withBody(new SwooleStream($frameStream->getRaw()))
 			->withBodyParams($frameStream->getRaw())
 			->withParsedBody($frameStream->getBody())
+			->withQueryParams(parse_query($frameStream->getUri()))
 			->withUri($uri, true);
 		return $request;
 	}

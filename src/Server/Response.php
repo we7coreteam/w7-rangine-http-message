@@ -14,6 +14,7 @@ namespace W7\Http\Message\Server;
 
 use Psr\Http\Message\ResponseInterface;
 use W7\Http\Message\Base\CookieTrait;
+use W7\Http\Message\Base\ResponseSugarTrait;
 use w7\Http\Message\File\File;
 use W7\Http\Message\Outputer\ResponseOutputerAbstract;
 use W7\Http\Message\Outputer\ResponseOutputerInterface;
@@ -25,6 +26,7 @@ use W7\Http\Message\Stream\SwooleStream;
  */
 class Response extends \W7\Http\Message\Base\Response implements ResponseInterface {
 	use CookieTrait;
+	use ResponseSugarTrait;
 
 	/**
 	 * Original response data. When this is not null, it will be converted into stream content

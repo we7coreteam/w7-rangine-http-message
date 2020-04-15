@@ -12,9 +12,8 @@
 
 namespace W7\Http\Message\Base;
 
-use W7\Contract\Arrayable;
+use W7\Http\Message\Contract\Arrayable;
 use W7\Http\Message\Helper\JsonHelper;
-use W7\Http\Message\Server\Response;
 
 trait ResponseSugarTrait {
 	/**
@@ -63,7 +62,7 @@ trait ResponseSugarTrait {
 		$this->getCharset() && $response = $response->withCharset($this->getCharset());
 
 		// Content
-		if (($data || is_numeric($data)) && ((is_array($data) || ($data instanceof \ArrayIterator) || $data instanceof Arrayable) || is_string($data))) {
+		if (($data || is_numeric($data)) && ((is_array($data) || ($data instanceof \ArrayObject) || $data instanceof Arrayable) || is_string($data))) {
 			is_string($data) && $data = ['data' => $data];
 			$content = JsonHelper::encode($data, $encodingOptions);
 			$response = $response->withContent($content);

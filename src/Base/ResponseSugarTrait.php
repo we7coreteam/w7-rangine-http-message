@@ -32,13 +32,14 @@ trait ResponseSugarTrait {
 	/**
 	 * return a Raw format response
 	 *
-	 * @param  string $data   The data
-	 * @param  int    $status The HTTP status code.
+	 * @param string $data The data
+	 * @param int $status The HTTP status code.
+	 * @param string $contentType
 	 * @return static
 	 */
-	public function raw(string $data = '', int $status = 200) {
+	public function raw(string $data = '', int $status = 200, $contentType = 'text/plain') {
 		$response = $this;
-		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', 'text/plain');
+		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', $contentType);
 		$this->getCharset() && $response = $response->withCharset($this->getCharset());
 		($data || is_numeric($data)) && $response = $response->withContent($data);
 		$status && $response = $response->withStatus($status);
@@ -62,8 +63,10 @@ trait ResponseSugarTrait {
 		$this->getCharset() && $response = $response->withCharset($this->getCharset());
 
 		// Content
-		if (($data || is_numeric($data)) && ((is_array($data) || ($data instanceof \ArrayObject) || $data instanceof Arrayable) || is_string($data))) {
-			is_string($data) && $data = ['data' => $data];
+		if (($data || is_numeric($data)) && ((is_array($data) || ($data instanceof \ArrayObject) || $data instanceof Arrayable) || is_string($data) || is_numeric($data))) {
+			if (is_string($data) || is_numeric($data)) {
+				$data = ['data' => $data];
+			}
 			$content = JsonHelper::encode($data, $encodingOptions);
 			$response = $response->withContent($content);
 		} else {
@@ -74,5 +77,9 @@ trait ResponseSugarTrait {
 		$status && $response = $response->withStatus($status);
 
 		return $response;
+	}
+
+	public function html(string $data = '', int $status = 200, $contentType = 'text/html') {
+		return $this->raw($data, $status, $contentType);
 	}
 }

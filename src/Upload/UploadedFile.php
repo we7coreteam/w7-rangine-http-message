@@ -29,7 +29,11 @@ class UploadedFile extends SymfonyUploadedFile implements UploadedFileInterface 
 	}
 
 	public function moveTo($targetPath) {
-		return $this->move($targetPath);
+		if (php_sapi_name() == 'cli') {
+			return rename($this->getPathname(), $targetPath);
+		}
+		$pathInfo = pathinfo($targetPath);
+		return $this->move($pathInfo['dirname'], $pathInfo['basename']);
 	}
 
 	public function getSize() {

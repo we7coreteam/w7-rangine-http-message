@@ -62,11 +62,11 @@ trait ResponseSugarTrait {
 		$response = $response->withoutHeader('Content-Type')->withAddedHeader('Content-Type', 'application/json');
 		$this->getCharset() && $response = $response->withCharset($this->getCharset());
 
+		if (is_string($data) || is_numeric($data) || is_bool($data)) {
+			$data = ['data' => $data];
+		}
 		// Content
-		if (($data || is_numeric($data)) && ((is_array($data) || ($data instanceof \ArrayObject) || $data instanceof Arrayable) || is_string($data) || is_numeric($data))) {
-			if (is_string($data) || is_numeric($data)) {
-				$data = ['data' => $data];
-			}
+		if (is_array($data) || ($data instanceof \ArrayObject) || $data instanceof Arrayable) {
 			$content = JsonHelper::encode($data, $encodingOptions);
 			$response = $response->withContent($content);
 		} else {

@@ -26,7 +26,7 @@ class ServiceProvider extends ProviderAbstract {
 	}
 
 	private function initCookieEnv() {
-		$config = $this->config->getUserAppConfig('cookie');
+		$config = $this->getConfigger()->get('app.cookie');
 
 		Cookie::$DEFAULTS['httpOnly'] = isset($config['http_only']) ? $config['http_only'] : ini_get('session.cookie_httponly');
 		Cookie::$DEFAULTS['path'] = isset($config['path']) ? $config['path'] : ini_get('session.cookie_path');
@@ -34,7 +34,7 @@ class ServiceProvider extends ProviderAbstract {
 		Cookie::$DEFAULTS['secure'] = isset($config['secure']) ? $config['secure'] : ini_get('session.cookie_secure');
 		Cookie::$DEFAULTS['expires'] = ini_get('session.gc_maxlifetime');
 
-		$config = $this->config->getUserAppConfig('session');
+		$config = $this->getConfigger()->get('app.session');
 		if (isset($config['expires']) && $config['expires'] >= 0) {
 			Cookie::$DEFAULTS['expires'] = (int)$config['expires'];
 		}

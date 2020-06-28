@@ -13,11 +13,12 @@
 namespace W7\Http\Message\Contract;
 
 interface Session {
-	public function set($key, $value);
-
-	public function get($key, $default = '');
-
+	public function setId($sessionId);
 	public function getId();
-
+	public function set($key, $value);
+	public function get($key, $default = '');
+	public function has($key);
+	public function delete($keys);
 	public function destroy();
+	public function close();
 }

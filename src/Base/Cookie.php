@@ -24,7 +24,8 @@ class Cookie extends SymfonyCookie {
 		'path' => '/',
 		'expires'  => 0,
 		'secure' => null,
-		'httpOnly' => true
+		'httpOnly' => true,
+		'sameSite' => 'None'
 	];
 
 	public static function create(string $name, string $value = null, $expire = 0, ?string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, bool $raw = false, ?string $sameSite = SymfonyCookie::SAMESITE_LAX): SymfonyCookie {
@@ -34,6 +35,7 @@ class Cookie extends SymfonyCookie {
 		is_null($domain) && $domain = self::$DEFAULTS['domain'];
 		is_null($secure) && $secure = self::$DEFAULTS['secure'];
 		is_null($httpOnly) && $httpOnly = boolval(self::$DEFAULTS['httpOnly']);
+		empty($sameSite) && $sameSite = self::$DEFAULTS['sameSite'];
 
 		return new self($name, $value, $expire, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
 	}

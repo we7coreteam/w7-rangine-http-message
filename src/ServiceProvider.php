@@ -32,7 +32,7 @@ class ServiceProvider extends ProviderAbstract {
 		Cookie::$DEFAULTS['path'] = isset($config['path']) ? $config['path'] : ini_get('session.cookie_path');
 		Cookie::$DEFAULTS['domain'] = isset($config['domain']) ? $config['domain'] : ini_get('session.cookie_domain');
 		Cookie::$DEFAULTS['secure'] = isset($config['secure']) ? $config['secure'] : ini_get('session.cookie_secure');
-		Cookie::$DEFAULTS['sameSite'] = !empty($config['same_site']) ? $config['same_site'] : Cookie::$DEFAULTS['sameSite'];
+		Cookie::$DEFAULTS['sameSite'] = isset($config['same_site']) ? $config['same_site'] : Cookie::$DEFAULTS['sameSite'];
 		Cookie::$DEFAULTS['expires'] = ini_get('session.gc_maxlifetime');
 
 		$config = $this->config->get('app.session');

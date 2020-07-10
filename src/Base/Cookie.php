@@ -25,7 +25,7 @@ class Cookie extends SymfonyCookie {
 		'expires'  => 0,
 		'secure' => null,
 		'httpOnly' => true,
-		'sameSite' => 'None'
+		'sameSite' => ''
 	];
 
 	public static function create(string $name, string $value = null, $expire = 0, ?string $path = null, string $domain = null, bool $secure = null, bool $httpOnly = null, bool $raw = false, ?string $sameSite = SymfonyCookie::SAMESITE_LAX): SymfonyCookie {

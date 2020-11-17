@@ -17,7 +17,7 @@ use W7\Http\Message\Base\CookieTrait;
 use W7\Http\Message\Base\ResponseSugarTrait;
 use w7\Http\Message\File\File;
 use W7\Http\Message\Outputer\ResponseOutputerAbstract;
-use W7\Http\Message\Outputer\ResponseOutputerInterface;
+use W7\Contract\Http\ResponseOutputerInterface;
 use W7\Http\Message\Stream\SwooleStream;
 
 /**

@@ -12,6 +12,8 @@
 
 namespace W7\Http\Message\Outputer;
 
+use W7\Contract\Http\ResponseOutputerInterface;
+
 abstract class ResponseOutputerAbstract implements ResponseOutputerInterface {
 	protected $sendFd = null;
 

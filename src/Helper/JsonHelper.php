@@ -12,7 +12,7 @@
 
 namespace W7\Http\Message\Helper;
 
-use W7\Http\Message\Contract\Arrayable;
+use W7\Contract\Support\Arrayable;
 
 /**
  * Class JsonHelper

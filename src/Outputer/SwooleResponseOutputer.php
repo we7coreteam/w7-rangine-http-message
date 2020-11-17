@@ -12,6 +12,7 @@
 
 namespace W7\Http\Message\Outputer;
 
+use SplFileInfo;
 use Swoole\Http\Response;
 use W7\Http\Message\Base\Cookie;
 
@@ -30,7 +31,7 @@ class SwooleResponseOutputer extends ResponseOutputerAbstract {
 		return $this->response->write($content);
 	}
 
-	public function sendFile($file) {
+	public function sendFile(SplFileInfo $file) {
 		return $this->response->sendfile($file->getRealPath(), $file->getOffset(), $file->getLength());
 	}
 
@@ -38,7 +39,7 @@ class SwooleResponseOutputer extends ResponseOutputerAbstract {
 		return $this->response->end($content);
 	}
 
-	public function sendHeader($headers) {
+	public function sendHeader(array $headers) {
 		if (empty($headers)) {
 			return true;
 		}
@@ -53,7 +54,7 @@ class SwooleResponseOutputer extends ResponseOutputerAbstract {
 		return true;
 	}
 
-	public function sendCookie($cookies) {
+	public function sendCookie(array $cookies) {
 		if (empty($cookies)) {
 			return true;
 		}

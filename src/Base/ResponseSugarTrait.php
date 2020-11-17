@@ -12,7 +12,7 @@
 
 namespace W7\Http\Message\Base;
 
-use W7\Http\Message\Contract\Arrayable;
+use W7\Contract\Support\Arrayable;
 use W7\Http\Message\Helper\JsonHelper;
 
 trait ResponseSugarTrait {

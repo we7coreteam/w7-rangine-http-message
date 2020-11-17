@@ -12,6 +12,7 @@
 
 namespace W7\Http\Message\Outputer;
 
+use SplFileInfo;
 use Swoole\WebSocket\Server;
 
 class WebSocketResponseOutputer extends ResponseOutputerAbstract {
@@ -34,16 +35,16 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 		}
 	}
 
-	public function sendHeader($headers) {
+	public function sendHeader(array $headers) {
 	}
 
-	public function sendCookie($cookies) {
+	public function sendCookie(array $cookies) {
 	}
 
 	public function sendStatus($code) {
 	}
 
-	public function sendFile($file) {
+	public function sendFile(SplFileInfo $file) {
 	}
 
 	public function sendChunk($content) {

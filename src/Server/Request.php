@@ -12,11 +12,11 @@
 
 namespace W7\Http\Message\Server;
 
-use function GuzzleHttp\Psr7\parse_query;
+use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Swoole\WebSocket\Frame;
-use W7\Http\Message\Contract\Session;
+use W7\Contract\Session\SessionInterface;
 use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Stream\FrameStream;
 use W7\Http\Message\Uri\Uri;
@@ -74,7 +74,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	private $bodyParams;
 
 	/**
-	 * @var Session
+	 * @var SessionInterface
 	 */
 	public $session;
 
@@ -169,7 +169,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			->withBody(new SwooleStream($frameStream->getRaw()))
 			->withBodyParams($frameStream->getRaw())
 			->withParsedBody($frameStream->getBody())
-			->withQueryParams(parse_query($frameStream->getUri()))
+			->withQueryParams(Query::parse($frameStream->getUri()))
 			->withUri($uri, true);
 		return $request;
 	}

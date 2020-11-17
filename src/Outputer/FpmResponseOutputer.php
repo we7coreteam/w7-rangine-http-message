@@ -12,6 +12,7 @@
 
 namespace W7\Http\Message\Outputer;
 
+use SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -33,7 +34,7 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 		self::getResponse()->setContent($content)->send();
 	}
 
-	public function sendHeader($headers) {
+	public function sendHeader(array $headers) {
 		if (empty($headers)) {
 			return true;
 		}
@@ -45,7 +46,7 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 		return true;
 	}
 
-	public function sendCookie($cookies) {
+	public function sendCookie(array $cookies) {
 		if (empty($cookies)) {
 			return true;
 		}
@@ -61,7 +62,7 @@ class FpmResponseOutputer extends ResponseOutputerAbstract {
 		self::getResponse()->setStatusCode($code);
 	}
 
-	public function sendFile($file) {
+	public function sendFile(SplFileInfo $file) {
 		self::getResponse()->sendHeaders();
 		return BinaryFileResponse::create($file)->send();
 	}

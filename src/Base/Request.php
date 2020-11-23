@@ -126,9 +126,8 @@ abstract class Request implements RequestInterface {
 			throw new \InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
 		}
 
-		$new = clone $this;
-		$new->requestTarget = $requestTarget;
-		return $new;
+		$this->requestTarget = $requestTarget;
+		return $this;
 	}
 
 	/**
@@ -159,9 +158,8 @@ abstract class Request implements RequestInterface {
 		if (! in_array($method, $methods)) {
 			throw new \InvalidArgumentException('Invalid Method');
 		}
-		$new = clone $this;
-		$new->method = $method;
-		return $new;
+		$this->method = $method;
+		return $this;
 	}
 
 	/**
@@ -207,14 +205,13 @@ abstract class Request implements RequestInterface {
 			return $this;
 		}
 
-		$new = clone $this;
-		$new->uri = $uri;
+		$this->uri = $uri;
 
 		if (! $preserveHost) {
-			$new->updateHostFromUri();
+			$this->updateHostFromUri();
 		}
 
-		return $new;
+		return $this;
 	}
 
 	/**

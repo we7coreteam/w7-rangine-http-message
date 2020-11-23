@@ -317,9 +317,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return Request
 	 */
 	public function withServerParams(array $server) {
-		$clone = clone $this;
-		$clone->serverParams = $server;
-		return $clone;
+		$this->serverParams = $server;
+		return $this;
 	}
 
 	/**
@@ -349,9 +348,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return static
 	 */
 	public function withCookieParams(array $cookies) {
-		$clone = clone $this;
-		$clone->cookieParams = $cookies;
-		return $clone;
+		$this->cookieParams = $cookies;
+		return $this;
 	}
 
 	/**
@@ -377,10 +375,9 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return static
 	 */
 	public function addQueryParam(string $name, $value) {
-		$clone = clone $this;
-		$clone->queryParams[$name] = $value;
+		$this->queryParams[$name] = $value;
 
-		return $clone;
+		return $this;
 	}
 
 	/**
@@ -403,9 +400,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return static
 	 */
 	public function withQueryParams(array $query) {
-		$clone = clone $this;
-		$clone->queryParams = $query;
-		return $clone;
+		$this->queryParams = $query;
+		return $this;
 	}
 
 	/**
@@ -433,9 +429,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @throws \InvalidArgumentException if an invalid structure is provided.
 	 */
 	public function withUploadedFiles(array $uploadedFiles) {
-		$clone = clone $this;
-		$clone->uploadedFiles = $uploadedFiles;
-		return $clone;
+		$this->uploadedFiles = $uploadedFiles;
+		return $this;
 	}
 
 	/**
@@ -465,10 +460,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 */
 	public function addParserBody(string $name, $value) {
 		if (is_array($this->parsedBody)) {
-			$clone = clone $this;
-			$clone->parsedBody[$name] = $value;
-
-			return $clone;
+			$this->parsedBody[$name] = $value;
 		}
 		return $this;
 	}
@@ -506,9 +498,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 *                                provided.
 	 */
 	public function withParsedBody($data) {
-		$clone = clone $this;
-		$clone->parsedBody = $data;
-		return $clone;
+		$this->parsedBody = $data;
+		return $this;
 	}
 
 	/**
@@ -519,9 +510,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return static
 	 */
 	public function withBodyParams($data) {
-		$clone = clone $this;
-		$clone->bodyParams = $data;
-		return $clone;
+		$this->bodyParams = $data;
+		return $this;
 	}
 
 	/**
@@ -569,9 +559,8 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @return static
 	 */
 	public function withAttribute($name, $value) {
-		$clone = clone $this;
-		$clone->attributes[$name] = $value;
-		return $clone;
+		$this->attributes[$name] = $value;
+		return $this;
 	}
 
 	/**
@@ -591,10 +580,9 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			return $this;
 		}
 
-		$clone = clone $this;
-		unset($clone->attributes[$name]);
+		unset($this->attributes[$name]);
 
-		return $clone;
+		return $this;
 	}
 
 	/**

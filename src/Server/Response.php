@@ -115,21 +115,18 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * @return static
 	 */
 	public function withContent($content): Response {
-		$new = clone $this;
-		$new->stream = new SwooleStream($content);
-		return $new;
+		$this->stream = new SwooleStream($content);
+		return $this;
 	}
 
 	public function withFile(File $file) {
-		$clone = clone $this;
-		$clone->file = $file;
-		return $clone;
+		$this->file = $file;
+		return $this;
 	}
 
 	public function withFd($fd) {
-		$clone = clone $this;
-		$clone->fd = $fd;
-		return $clone;
+		$this->fd = $fd;
+		return $this;
 	}
 
 	private function withSendHeader() {

@@ -25,8 +25,8 @@ abstract class ResponseOutputerAbstract implements ResponseOutputerInterface {
 		if (empty($fd)) {
 			return $this;
 		}
-		$clone = clone $this;
-		$clone->sendFd = $fd;
-		return $clone;
+
+		$this->sendFd = $fd;
+		return $this;
 	}
 }

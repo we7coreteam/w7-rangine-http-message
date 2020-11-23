@@ -51,10 +51,9 @@ trait CookieTrait {
 			$value = $name;
 			$name = $name->getName();
 		}
-		$new = clone $this;
-		$new->setCookie($name, $value);
+		$this->setCookie($name, $value);
 
-		return $new;
+		return $this;
 	}
 
 	/**
@@ -74,10 +73,9 @@ trait CookieTrait {
 	 * @return CookieTrait
 	 */
 	public function withoutCookie(string $name): self {
-		$new = clone $this;
-		$new->delCookie($name);
+		$this->delCookie($name);
 
-		return $new;
+		return $this;
 	}
 
 	/**
@@ -110,19 +108,17 @@ trait CookieTrait {
 	 * @return $this
 	 */
 	public function withCookies(array $cookies): self {
-		$new = clone $this;
-		$new->setCookies($cookies);
+		$this->setCookies($cookies);
 
-		return $new;
+		return $this;
 	}
 
 	/**
 	 * @return CookieTrait
 	 */
 	public function withoutCookies(): self {
-		$new = clone $this;
-		$new->setCookies([]);
+		$this->setCookies([]);
 
-		return $new;
+		return $this;
 	}
 }

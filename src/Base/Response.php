@@ -146,9 +146,8 @@ abstract class Response implements ResponseInterface {
 	 * @return static
 	 */
 	public function withAttribute($name, $value) {
-		$clone = clone $this;
-		$clone->attributes[$name] = $value;
-		return $clone;
+		$this->attributes[$name] = $value;
+		return $this;
 	}
 
 	/**
@@ -181,13 +180,12 @@ abstract class Response implements ResponseInterface {
 	 * @throws \InvalidArgumentException For invalid status code arguments.
 	 */
 	public function withStatus($code, $reasonPhrase = ''): self {
-		$clone = clone $this;
-		$clone->statusCode = (int)$code;
+		$this->statusCode = (int)$code;
 		if (! $reasonPhrase && isset(self::$phrases[$code])) {
 			$reasonPhrase = self::$phrases[$code];
 		}
-		$clone->reasonPhrase = $reasonPhrase;
-		return $clone;
+		$this->reasonPhrase = $reasonPhrase;
+		return $this;
 	}
 
 	/**

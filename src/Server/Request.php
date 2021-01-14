@@ -16,6 +16,7 @@ use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Swoole\WebSocket\Frame;
+use W7\Contract\Router\RouteInterface;
 use W7\Contract\Session\SessionInterface;
 use W7\Http\Message\Server\Concerns\InteractsWithInput;
 use W7\Http\Message\Stream\FrameStream;
@@ -27,6 +28,9 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 /**
  * Class Request
  * @package W7\Http\Message\Server
+ *
+ * @property SessionInterface $session
+ * @property RouteInterface $route
  */
 class Request extends \W7\Http\Message\Base\Request implements ServerRequestInterface {
 	use InteractsWithInput;
@@ -72,11 +76,6 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	 * @var mixed
 	 */
 	private $bodyParams;
-
-	/**
-	 * @var SessionInterface
-	 */
-	public $session;
 
 	/**
 	 * Load a swoole request, and transfer to a swoft request object

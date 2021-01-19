@@ -51,6 +51,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	protected $outputer;
 
 	protected $fd = null;
+	protected $isClose = false;
 
 	public function __construct() {
 	}
@@ -89,6 +90,10 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
+		if ($this->isClose) {
+			return false;
+		}
+
 		$this->withSendHeader();
 
 		/**
@@ -105,7 +110,9 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * 适用于长连接或是http发送chunk数据时主动关闭连接
 	 */
 	public function close() {
-		return $this->getOutputer()->disConnect();
+		$clone = clone $this;
+		$clone->isClose = $this->getOutputer()->disConnect();
+		return $clone;
 	}
 
 	/**

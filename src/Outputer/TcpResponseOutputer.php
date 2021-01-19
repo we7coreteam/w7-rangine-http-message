@@ -52,7 +52,7 @@ class TcpResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function disConnect() {
-		return $this->response->disconnect($this->getFd());
+		return $this->response->close($this->getFd());
 	}
 
 	private function getFd() {

@@ -51,7 +51,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	protected $outputer;
 
 	protected $fd = null;
-	protected $isClose = false;
+	protected $hasClose = false;
 
 	public function __construct() {
 	}
@@ -90,7 +90,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 * 处理 Response 并发送数据
 	 */
 	public function send() {
-		if ($this->isClose) {
+		if ($this->hasClose) {
 			return false;
 		}
 
@@ -111,7 +111,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 	 */
 	public function close() {
 		$clone = clone $this;
-		$clone->isClose = $this->getOutputer()->disConnect();
+		$clone->hasClose = $this->getOutputer()->disConnect();
 		return $clone;
 	}
 

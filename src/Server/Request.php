@@ -642,7 +642,7 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 	/**
 	 * @return \Swoole\Http\Request
 	 */
-	public function getSwooleRequest(): \Swoole\Http\Request {
+	public function getSwooleRequest() {
 		return $this->swooleRequest;
 	}
 

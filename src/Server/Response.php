@@ -102,8 +102,7 @@ class Response extends \W7\Http\Message\Base\Response implements ResponseInterfa
 		if (!empty($this->file)) {
 			return $this->getOutputer()->sendFile($this->file);
 		} else {
-			$responseBody = $this->getBody()->getContents();
-			return $responseBody && $this->getOutputer()->sendBody($this->getBody()->getContents());
+			return $this->getOutputer()->sendBody($this->getBody()->getContents());
 		}
 	}
 

@@ -29,7 +29,7 @@ class TcpResponseOutputer extends ResponseOutputerAbstract {
 
 	public function sendBody($content) {
 		if ($this->response->exist($this->getFd())) {
-			return $this->response->send($this->getFd(), $content);
+			return $content && $this->response->send($this->getFd(), $content);
 		} else {
 			throw new \RuntimeException('Client(fd: ' . $this->getFd() . ') has lost connection');
 		}

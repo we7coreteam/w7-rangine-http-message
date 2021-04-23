@@ -141,8 +141,13 @@ class Request extends \W7\Http\Message\Base\Request implements ServerRequestInte
 			$body,
 			$protocol
 		);
+		$uri = $request->getUri();
+		$uri = $uri->withScheme($symfonyRequest->getScheme());
+		$uri = $uri->withHost($symfonyRequest->getHost());
+		$uri = $uri->withPort($symfonyRequest->getPort());
 
-		return $request->withCookieParams($symfonyRequest->cookies->all() ?? [])
+		return $request->withUri($uri)
+				->withCookieParams($symfonyRequest->cookies->all() ?? [])
 				->withServerParams($symfonyRequest->server->all() ?? [])
 				->withQueryParams($symfonyRequest->query->all() ?? [])
 				->withParsedBody($symfonyRequest->request->all() ?? [])

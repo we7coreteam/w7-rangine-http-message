@@ -36,7 +36,7 @@ class ServiceProvider extends ProviderAbstract {
 
 		$expires = (int)$this->config->get('app.session.expires', ini_get('session.cookie_lifetime'));
 		if ($expires > 0) {
-			Cookie::$DEFAULTS['expires'] = time() + $expires;
+			Cookie::$DEFAULTS['expires'] = $expires;
 		}
 	}
 }

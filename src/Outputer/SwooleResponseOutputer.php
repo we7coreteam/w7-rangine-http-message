@@ -64,12 +64,13 @@ class SwooleResponseOutputer extends ResponseOutputerAbstract {
 		foreach ($cookies as $name => $cookie) {
 			$this->response->cookie(
 				$cookie->getName(),
-				$cookie->getValue() ? : 1,
+				$cookie->getValue(),
 				$cookie->getExpiresTime(),
 				$cookie->getPath(),
 				$cookie->getDomain(),
 				$cookie->isSecure(),
-				$cookie->isHttpOnly()
+				$cookie->isHttpOnly(),
+				$cookie->getSameSite()
 			);
 		}
 

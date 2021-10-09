@@ -5,6 +5,8 @@
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
+ * This is not a free software
+ * Using it under the license terms
  * visited https://www.w7.cc for more details
  */
 
@@ -379,7 +381,8 @@ trait MessageTrait {
 		// special case - a bit optimized
 		if ($firstName === $wantedPart) {
 			$field = strtok($field, ';');
-			return $field[0] == '"' ? substr($field, 1, -1) : $field;
+			// $field 可能为 false，php7报notice错误，php8报waring错误，此处需要判断一下
+			return (!empty($field) && $field[0] == '"') ? substr($field, 1, -1) : $field;
 		}
 
 		$field = $firstName . '=' . $field;

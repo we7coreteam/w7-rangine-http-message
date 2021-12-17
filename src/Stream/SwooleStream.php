@@ -28,6 +28,11 @@ class SwooleStream implements StreamInterface {
 	protected $size;
 
 	/**
+	 * @var bool
+	 */
+	protected $writable;
+
+	/**
 	 * SwooleStream constructor.
 	 *
 	 * @param string $contents
@@ -35,6 +40,7 @@ class SwooleStream implements StreamInterface {
 	public function __construct(string $contents = null) {
 		$this->contents = $contents;
 		$this->size = strlen($this->contents);
+		$this->writable = true;
 	}
 
 	/**
@@ -62,7 +68,7 @@ class SwooleStream implements StreamInterface {
 	 * @return void
 	 */
 	public function close() {
-		throw new \BadMethodCallException('Not implemented');
+		$this->detach();
 	}
 
 	/**
@@ -72,7 +78,11 @@ class SwooleStream implements StreamInterface {
 	 * @return resource|null Underlying PHP stream, if any
 	 */
 	public function detach() {
-		throw new \BadMethodCallException('Not implemented');
+		$this->contents = '';
+		$this->size = 0;
+		$this->writable = false;
+
+		return null;
 	}
 
 	/**
@@ -103,7 +113,7 @@ class SwooleStream implements StreamInterface {
 	 * @return bool
 	 */
 	public function eof() {
-		throw new \BadMethodCallException('Not implemented');
+		return $this->getSize() === 0;
 	}
 
 	/**
@@ -112,7 +122,7 @@ class SwooleStream implements StreamInterface {
 	 * @return bool
 	 */
 	public function isSeekable() {
-		throw new \BadMethodCallException('Not implemented');
+		return false;
 	}
 
 	/**
@@ -141,7 +151,7 @@ class SwooleStream implements StreamInterface {
 	 * @throws \RuntimeException on failure.
 	 */
 	public function rewind() {
-		throw new \BadMethodCallException('Not implemented');
+		$this->seek(0);
 	}
 
 	/**
@@ -150,7 +160,7 @@ class SwooleStream implements StreamInterface {
 	 * @return bool
 	 */
 	public function isWritable() {
-		return false;
+		return $this->writable;
 	}
 
 	/**
@@ -161,7 +171,16 @@ class SwooleStream implements StreamInterface {
 	 * @throws \RuntimeException on failure.
 	 */
 	public function write($string) {
-		throw new \BadMethodCallException('Not implemented');
+		if (!$this->writable) {
+			throw new \RuntimeException('Cannot write to a non-writable stream');
+		}
+
+		$size = strlen($string);
+
+		$this->contents .= $string;
+		$this->size += $size;
+
+		return $size;
 	}
 
 	/**
@@ -184,7 +203,16 @@ class SwooleStream implements StreamInterface {
 	 * @throws \RuntimeException if an error occurs.
 	 */
 	public function read($length) {
-		throw new \BadMethodCallException('Not implemented');
+		if ($length >= $this->getSize()) {
+			$result = $this->contents;
+			$this->contents = '';
+			$this->size = 0;
+		} else {
+			$result = substr($this->contents, 0, $length);
+			$this->contents = substr($this->contents, $length);
+			$this->size = $this->getSize() - $length;
+		}
+		return $result;
 	}
 
 	/**

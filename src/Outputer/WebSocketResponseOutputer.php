@@ -31,6 +31,8 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 		if ($content !== '' && $this->response->isEstablished($this->getFd())) {
 			return $this->response->push($this->getFd(), $content);
 		}
+
+		return false;
 	}
 
 	public function sendHeader(array $headers) {

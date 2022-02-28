@@ -28,10 +28,8 @@ class WebSocketResponseOutputer extends ResponseOutputerAbstract {
 	}
 
 	public function sendBody($content) {
-		if ($this->response->isEstablished($this->getFd())) {
+		if ($content !== '' && $this->response->isEstablished($this->getFd())) {
 			return $this->response->push($this->getFd(), $content);
-		} else {
-			throw new \RuntimeException('Client(fd: ' . $this->getFd() . ') has lost connection');
 		}
 	}
 

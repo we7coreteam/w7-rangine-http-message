@@ -38,5 +38,10 @@
 	"require-dev": {
 		"w7/php-cs-fixer": "*",
 		"swoole/ide-helper": "^4.4"
+	},
+	"config": {
+		"allow-plugins": {
+			"w7/php-cs-fixer": true
+		}
 	}
 }

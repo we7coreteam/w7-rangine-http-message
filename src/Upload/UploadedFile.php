@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Rangine Http Message
+ * WeEngine Api System
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
@@ -34,14 +34,6 @@ class UploadedFile extends SymfonyUploadedFile implements UploadedFileInterface 
 		}
 		$pathInfo = pathinfo($targetPath);
 		return $this->move($pathInfo['dirname'], $pathInfo['basename']);
-	}
-
-	public function getSize() {
-		return parent::getSize();
-	}
-
-	public function getError() {
-		return parent::getError();
 	}
 
 	public function getClientFilename() {

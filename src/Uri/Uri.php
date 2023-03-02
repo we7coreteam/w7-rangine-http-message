@@ -1,10 +1,12 @@
 <?php
 
 /**
- * Rangine Http Message
+ * WeEngine Api System
  *
  * (c) We7Team 2019 <https://www.w7.cc>
  *
+ * This is not a free software
+ * Using it under the license terms
  * visited https://www.w7.cc for more details
  */
 
@@ -91,7 +93,7 @@ class Uri implements UriInterface {
 		if ($uri != '') {
 			$parts = parse_url($uri);
 			if ($parts === false) {
-				throw new \InvalidArgumentException("Unable to parse URI: $uri");
+				$parts = [];
 			}
 
 			$this->applyParts($parts);
